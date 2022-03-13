@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::create('institutes', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('address');
-            $table->string('telp');
-            $table->string('email');
-            $table->string('website');
+            $table->string('address')->nullable();
+            $table->string('telp')->nullable();
+            $table->string('email')->nullable();
+            $table->string('website')->nullable();
             $table->integer('institute_type_id');
             $table->string('country_id', 2);
 

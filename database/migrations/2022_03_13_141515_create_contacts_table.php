@@ -13,12 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('institute_units', function (Blueprint $table) {
+        Schema::create('contacts', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('title');
+            $table->string('fullname');
+            $table->string('nickname')->nullable();
+            $table->json('telp')->nullable();
+            $table->json('email')->nullable();
             $table->integer('institute_id');
-
             $table->timestamps();
+
             $table->foreign('institute_id')->references('id')->on('institutes');
         });
     }
@@ -30,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('institute_units');
+        Schema::dropIfExists('contacts');
     }
 };
