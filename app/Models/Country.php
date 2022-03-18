@@ -8,12 +8,4 @@ use Illuminate\Database\Eloquent\Model;
 class Country extends Model
 {
     use HasFactory;
-
-    /**
-     * Get the continent that owns the country.
-     */
-    public function continent()
-    {
-        return $this->belongsTo(Continent::class);
-    }
 }

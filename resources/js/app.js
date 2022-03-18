@@ -1,7 +1,7 @@
-require('./bootstrap');
+require("./bootstrap");
 
-import Alpine from 'alpinejs';
+window.easing = require("jquery-easing");
+window.Tabulator = require("tabulator-tables");
+window.bootstrapSelect = require("bootstrap-select");
 
-window.Alpine = Alpine;
-
-Alpine.start();
+require("./sb-admin");
