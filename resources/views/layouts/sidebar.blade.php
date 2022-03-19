@@ -41,7 +41,7 @@
     <hr class="sidebar-divider">
     <!-- Heading -->
     <div class="sidebar-heading">
-        Table Editor
+        References
     </div>
     <li class="nav-item {{ request()->is('app/area/*') ? 'active' : '' }}">
         <a class="nav-link {{ request()->is('app/area/*') ? '' : 'collapsed' }}" href="#" data-bs-toggle="collapse" data-bs-target="#collapseArea" aria-expanded="true" aria-controls="collapseArea">
@@ -52,6 +52,17 @@
                 <h6 class="collapse-header">Area:</h6>
                 <a class="collapse-item {{ request()->is('app/area/continents') ? 'active' : '' }}" href="{{ route('continents') }}">Continents</a>
                 <a class="collapse-item {{ request()->is('app/area/countries') ? 'active' : '' }}" href="{{ route('countries') }}">Countries</a>
+            </div>
+        </div>
+    </li>
+    <li class="nav-item {{ request()->is('app/miscellaneous/*') ? 'active' : '' }}">
+        <a class="nav-link {{ request()->is('app/miscellaneous/*') ? '' : 'collapsed' }}" href="#" data-bs-toggle="collapse" data-bs-target="#collapseMiscellaneous" aria-expanded="true" aria-controls="collapseMiscellaneous">
+            <i class="fa-solid fa-database"></i> <span>Miscellaneous</span>
+        </a>
+        <div id="collapseMiscellaneous" class="collapse {{ request()->is('app/miscellaneous/*') ? 'show' : '' }}" aria-labelledby="headingMiscellaneous" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Institute:</h6>
+                <a class="collapse-item {{ request()->is('app/miscellaneous/institute/types') ? 'active' : '' }}" href="{{ route('instituteTypes') }}">Types</a>
             </div>
         </div>
     </li>
