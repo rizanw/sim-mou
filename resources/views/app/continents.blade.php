@@ -36,13 +36,13 @@
                     @csrf
                     <input id="id" name="id" type="hidden">
                     <div class="form-group row mb-2">
-                        <label class="col-sm-2 col-form-label">Code: </label>
+                        <label class="col-sm-2 col-form-label">Code<b class="required">*</b>: </label>
                         <div class="col-sm-10">
                             <input id="code" name="code" class="form-control" type="text" placeholder="ex: AS" required>
                         </div>
                     </div>
                     <div class="form-group row mb-4">
-                        <label class="col-sm-2 col-form-label">Name: </label>
+                        <label class="col-sm-2 col-form-label">Name<b class="required">*</b>: </label>
                         <div class="col-sm-10">
                             <input id="name" name="name" class="form-control" type="text" placeholder="ex: Asia" required>
                         </div>

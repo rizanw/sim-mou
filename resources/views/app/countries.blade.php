@@ -44,19 +44,19 @@
                     @csrf
                     <input id="id" name="id" type="hidden">
                     <div class="form-group row mb-2">
-                        <label class="col-sm-2 col-form-label">Code: </label>
+                        <label class="col-sm-2 col-form-label">Code<b class="required">*</b>: </label>
                         <div class="col-sm-10">
                             <input id="code" name="code" class="form-control" type="text" placeholder="ex: ID" required>
                         </div>
                     </div>
                     <div class="form-group row mb-2">
-                        <label class="col-sm-2 col-form-label">Name: </label>
+                        <label class="col-sm-2 col-form-label">Name<b class="required">*</b>: </label>
                         <div class="col-sm-10">
                             <input id="name" name="name" class="form-control" type="text" placeholder="ex: Indonesia" required>
                         </div>
                     </div>
                     <div class="form-group row mb-4">
-                        <label class="col-sm-2 col-form-label">Continent: </label>
+                        <label class="col-sm-2 col-form-label">Continent<b class="required">*</b>: </label>
                         <div class="col-sm-10">
                             <select name="continent_id" class="selectpicker form-control" data-live-search="true" required>
                                 <option disabled selected>--- Select a continent ---</option>

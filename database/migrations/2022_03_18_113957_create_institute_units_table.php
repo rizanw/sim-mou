@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('institute_units', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('desc')->nullable();
             $table->integer('institute_id');
 
             $table->timestamps();

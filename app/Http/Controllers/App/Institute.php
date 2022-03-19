@@ -33,7 +33,7 @@ class Institute extends Controller
         $continents = Continent::all();
         $countries = Country::all();
 
-        return view('app.institution')
+        return view('app.institutions')
             ->with('instituteTypes', $instituteTypes)
             ->with('continents', $continents)
             ->with('countries', $countries);

@@ -29,7 +29,6 @@ class InstituteType extends Controller
         return view('app.instituteTypes');
     }
 
-
     /**
      * Create json data for the application InstituteType dashboard.
      *

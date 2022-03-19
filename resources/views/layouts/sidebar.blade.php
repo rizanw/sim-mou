@@ -19,16 +19,16 @@
             <span>Documents</span>
         </a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePartner" aria-expanded="true" aria-controls="collapsePartner">
+    <li class="nav-item {{ request()->is('app/partner/*') ? 'active' : '' }}">
+        <a class="nav-link {{ request()->is('app/partner/*') ? '' : 'collapsed' }}" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePartner" aria-expanded="true" aria-controls="collapsePartner">
             <i class="fa-solid fa-handshake-simple"></i>
             <span>Partners</span>
         </a>
-        <div id="collapsePartner" class="collapse" aria-labelledby="headingPartner" data-parent="#accordionSidebar">
+        <div id="collapsePartner" class="collapse {{ request()->is('app/partner/*') ? 'show' : '' }}" aria-labelledby="headingPartner" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Partner data:</h6>
-                <a class="collapse-item" href="{{route('institutions')}}">Institutions</a>
-                <a class="collapse-item" href="{{route('home')}}">Units</a>
+                <a class="collapse-item {{ request()->is('app/partner/institutions') ? 'active' : '' }}" href="{{route('institutions')}}">Institutions</a>
+                <a class="collapse-item {{ request()->is('app/partner/units') ? 'active' : '' }}" href="{{route('units')}}">Units</a>
             </div>
         </div>
     </li>
