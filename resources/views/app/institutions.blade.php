@@ -133,7 +133,6 @@
         $("#continentSelect").selectpicker("val", this.options[this.selectedIndex].dataset.continent)
     });
 
-
     var deleteIcon = function(cell, formatterParams) {
         return '<i style="color: #C82333" class="fa-solid fa-trash"></i>';
     };

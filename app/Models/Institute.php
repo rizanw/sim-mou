@@ -18,6 +18,14 @@ class Institute extends Model
     }
 
     /**
+     * Get the contacts for the Institute.
+     */
+    public function contacts()
+    {
+        return $this->hasMany(Contact::class);
+    }
+
+    /**
      * Get the country that owns the Institute.
      */
     public function country()

@@ -15,12 +15,12 @@ return new class extends Migration
     {
         Schema::create('contacts', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->string('type');
             $table->string('fullname');
             $table->string('nickname')->nullable();
             $table->json('telp')->nullable();
             $table->json('email')->nullable();
-            $table->integer('institute_id');
+            $table->integer('institute_id')->nullable();
             $table->timestamps();
 
             $table->foreign('institute_id')->references('id')->on('institutes');

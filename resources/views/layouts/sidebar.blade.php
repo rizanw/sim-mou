@@ -32,8 +32,8 @@
             </div>
         </div>
     </li>
-    <li class="nav-item {{ request()->is('home/contacts') ? 'active' : '' }}">
-        <a class="nav-link" href="{{route('home')}}">
+    <li class="nav-item {{ request()->is('app/contacts') ? 'active' : '' }}">
+        <a class="nav-link" href="{{route('contacts')}}">
             <i class="fa-solid fa-address-book"></i>
             <span>Contacts</span>
         </a>

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('pagetitle', 'Institution Units')
+@section('pagetitle', 'Units')
 
 @section('content')
 <div>
