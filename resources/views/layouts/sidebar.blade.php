@@ -1,20 +1,20 @@
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{route('dashboard')}}">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{route('home')}}">
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fa-solid fa-handshake"></i>
         </div>
         <div class="sidebar-brand-text mx-3">{{ config('app.name', 'SIM MoU') }}</div>
     </a>
     <hr class="sidebar-divider my-0">
-    <li class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}">
-        <a class="nav-link" href="{{route('dashboard')}}">
+    <li class="nav-item {{ request()->is('home') ? 'active' : '' }}">
+        <a class="nav-link" href="{{route('home')}}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span>
         </a>
     </li>
-    <li class="nav-item {{ request()->is('dashboard/documents') ? 'active' : '' }}">
-        <a class="nav-link" href="{{route('dashboard')}}">
+    <li class="nav-item {{ request()->is('home/documents') ? 'active' : '' }}">
+        <a class="nav-link" href="{{route('home')}}">
             <i class="fa-solid fa-file-contract"></i>
             <span>Documents</span>
         </a>
@@ -27,13 +27,13 @@
         <div id="collapsePartner" class="collapse" aria-labelledby="headingPartner" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Partner data:</h6>
-                <a class="collapse-item" href="{{route('dashboard')}}">Institutions</a>
-                <a class="collapse-item" href="{{route('dashboard')}}">Units</a>
+                <a class="collapse-item" href="{{route('home')}}">Institutions</a>
+                <a class="collapse-item" href="{{route('home')}}">Units</a>
             </div>
         </div>
     </li>
-    <li class="nav-item {{ request()->is('dashboard/contacts') ? 'active' : '' }}">
-        <a class="nav-link" href="{{route('dashboard')}}">
+    <li class="nav-item {{ request()->is('home/contacts') ? 'active' : '' }}">
+        <a class="nav-link" href="{{route('home')}}">
             <i class="fa-solid fa-address-book"></i>
             <span>Contacts</span>
         </a>
@@ -43,14 +43,15 @@
     <div class="sidebar-heading">
         Table Editor
     </div>
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseCountry" aria-expanded="true" aria-controls="collapseCountry">
-            <i class="fas fa-flag"></i> <span>Country</span>
+    <li class="nav-item {{ request()->is('app/area/*') ? 'active' : '' }}">
+        <a class="nav-link {{ request()->is('app/area/*') ? '' : 'collapsed' }}" href="#" data-bs-toggle="collapse" data-bs-target="#collapseArea" aria-expanded="true" aria-controls="collapseArea">
+            <i class="fa-solid fa-map-location-dot"></i> <span>Area</span>
         </a>
-        <div id="collapseCountry" class="collapse" aria-labelledby="headingCountry" data-parent="#accordionSidebar">
+        <div id="collapseArea" class="collapse {{ request()->is('app/area/*') ? 'show' : '' }}" aria-labelledby="headingArea" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Country:</h6>
-                <a class="collapse-item" href="{{ route('dashboard') }}">List Country</a>
+                <h6 class="collapse-header">Area:</h6>
+                <a class="collapse-item {{ request()->is('app/area/continents') ? 'active' : '' }}" href="{{ route('continents') }}">Continents</a>
+                <a class="collapse-item {{ request()->is('app/area/countries') ? 'active' : '' }}" href="{{ route('countries') }}">Countries</a>
             </div>
         </div>
     </li>
@@ -68,8 +69,8 @@
         <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">User : {{Auth::user()->name}}:</h6>
-                <a class="collapse-item" href="{{route('dashboard')}}">Edit Profile</a>
-                <a class="collapse-item" href="{{route('dashboard')}}">Change Password</a>
+                <a class="collapse-item" href="{{route('home')}}">Edit Profile</a>
+                <a class="collapse-item" href="{{route('home')}}">Change Password</a>
             </div>
         </div>
     </li>
@@ -91,8 +92,8 @@
         <div id="collapseUAM" class="collapse" aria-labelledby="headingUAM" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Logs:</h6>
-                <!-- <a class="collapse-item" href="{{route('dashboard')}}">Logged Activities</a>
-                <a class="collapse-item" href="{{route('dashboard')}}">Logged Log-in</a> -->
+                <!-- <a class="collapse-item" href="{{route('home')}}">Logged Activities</a>
+                <a class="collapse-item" href="{{route('home')}}">Logged Log-in</a> -->
             </div>
         </div>
     </li>

@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'SIM-MoU') }} : @yield('pagetitle')</title>
+    <title>{{ config('app.name', 'SIM-MoU') }}: @yield('pagetitle')</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -90,7 +90,30 @@
                 @include('layouts.topbar')
                 <div class="container-fluid">
                     <h1 class="h3 mb-4 text-gray-800">@yield('pagetitle')</h1>
-                    @yield('content')
+                    <div class="container">
+                        @include('components.alert')
+                        @yield('content')
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="confirmBox" tabindex="-1" aria-labelledby="confirmBox" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmBoxTitle">Confirmation Box</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div id="confirmBoxBody" class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <form id="confirmBoxForm" method="POST">
+                        @csrf
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                        <button type="submit" class="btn btn-primary">Yes</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -104,6 +127,7 @@
             $(".preload-background").fadeOut("slow");
         });
     </script>
+    @yield('script')
 </body>
 
 </html>
