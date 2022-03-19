@@ -27,7 +27,7 @@
         <div id="collapsePartner" class="collapse" aria-labelledby="headingPartner" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Partner data:</h6>
-                <a class="collapse-item" href="{{route('home')}}">Institutions</a>
+                <a class="collapse-item" href="{{route('institutions')}}">Institutions</a>
                 <a class="collapse-item" href="{{route('home')}}">Units</a>
             </div>
         </div>

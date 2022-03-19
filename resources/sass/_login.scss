@@ -43,3 +43,7 @@ form.user {
 .btn-facebook {
     @include button-variant($brand-facebook, $white);
 }
+
+b.required {
+    color: $red;
+}

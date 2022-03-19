@@ -1,7 +1,26 @@
 .btn {
-    color: white;
+    color: $white;
     &:hover {
-        color: white;
+        color: $white;
+    }
+    &:active {
+        color: $white;
+    }
+    &:focus {
+        color: $white;
+    }
+}
+
+.btn.btn-light {
+    color: $gray-900;
+    &:hover {
+        color: $gray-900;
+    }
+    &:active {
+        color: $gray-900;
+    }
+    &:focus {
+        color: $gray-900;
     }
 }
 

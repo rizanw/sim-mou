@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\App\Continent;
 use App\Http\Controllers\App\Country;
+use App\Http\Controllers\App\Institute;
 use App\Http\Controllers\App\InstituteType;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -31,12 +32,34 @@ Route::prefix('app')->middleware(['auth'])->group(function () {
     });
     Route::get('/dashboard', [\App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
 
+    // Partner routes
+    Route::prefix('partner')->group(function () {
+        // Institute routes
+        Route::get('/institutions', [Institute::class, 'index'])->name('institutions');
+        Route::prefix('institution')->group(function () {
+            Route::get('/data', [Institute::class, 'data'])->name('institution.data');
+            Route::post('/store', [Institute::class, 'store'])->name('institution.store');
+            Route::post('/update', [Institute::class, 'update'])->name('institution.update');
+            Route::post('/delete', [Institute::class, 'delete'])->name('institution.delete');
+        });
+    });
+
+    Route::get('/contacts', [Institute::class, 'data'])->name('contacts');
+    Route::prefix('contact')->group(function () {
+        // Institute routes
+        Route::get('/data', [Institute::class, 'data'])->name('contact.data');
+        Route::post('/store', [Institute::class, 'store'])->name('contact.store');
+        Route::post('/update', [Institute::class, 'update'])->name('contact.update');
+        Route::post('/delete', [Institute::class, 'delete'])->name('contact.delete');
+    });
+
     // Area routes
     Route::prefix('area')->group(function () {
         Route::get('/', function () {
             return redirect('/app/dashboard');
         });
 
+        // continent routes
         Route::get('/continents', [Continent::class, 'index'])->name('continents');
         Route::prefix('continent')->group(function () {
             Route::get('/data', [Continent::class, 'data'])->name('continent.data');
@@ -45,6 +68,7 @@ Route::prefix('app')->middleware(['auth'])->group(function () {
             Route::post('/delete', [Continent::class, 'delete'])->name('continent.delete');
         });
 
+        // country routes
         Route::get('/countries', [Country::class, 'index'])->name('countries');
         Route::prefix('country')->group(function () {
             Route::get('/data', [Country::class, 'data'])->name('country.data');
