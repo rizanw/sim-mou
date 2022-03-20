@@ -15,8 +15,10 @@
             </button>
         </div>
     </div>
-    <div class="card">
-        <div class="card-header">{{ __('Table') }}</div>
+    <div class="card mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">{{ __('Table') }}</h6>
+        </div>
         <div class="card-body">
             <div id="institution-table"></div>
         </div>
@@ -43,7 +45,7 @@
                         <label class="col-sm-2 col-form-label">Type<b class="required">*</b>:</label>
                         <div class="col-sm-10">
                             <select id="typeSelect" name="institution_type" class="selectpicker form-control" data-live-search="true" required>
-                                <option disabled selected>--- Select a Institution Type ---</option>
+                                <option value="0" disabled selected>--- Select a Institution Type ---</option>
                                 @foreach ($institutionTypes as $institutionType)
                                 <option value="{{$institutionType->id}}">{{$institutionType->name}}</option>
                                 @endforeach
@@ -89,7 +91,7 @@
                         <label class="col-sm-2 col-form-label">Continent: </label>
                         <div class="col-sm-10">
                             <select id="continentSelect" name="continent_id" class="selectpicker form-control" data-live-search="true" disabled>
-                                <option disabled selected>--- automatically select ---</option>
+                                <option value="0" disabled selected>--- automatically select ---</option>
                                 @foreach ($continents as $continent)
                                 <option value="{{$continent->id}}">{{$continent->name}}</option>
                                 @endforeach
@@ -100,7 +102,7 @@
                         <label class="col-sm-2 col-form-label">Country<b class="required">*</b>: </label>
                         <div class="col-sm-10">
                             <select id="countrySelect" name="country_id" class="selectpicker form-control" data-live-search="true" required>
-                                <option disabled selected>--- Select a country ---</option>
+                                <option value="0" disabled selected>--- Select a country ---</option>
                                 @foreach ($countries as $country)
                                 <option data-continent="{{$country->continent_id}}" data-subtext="{{$country->continent->name}}" value="{{$country->id}}">{{$country->name}}</option>
                                 @endforeach
@@ -129,6 +131,20 @@
 
 @section('script')
 <script type="text/javascript">
+    $('#institutionModal').on('hidden.bs.modal', function(e) {
+        $('#institutionModalTitle').html('Add Institution')
+        $('#institutionForm').attr('action', "{{route('institution.store')}}");
+        $('input[name=id]').val('')
+        $('input[name=name]').val('')
+        $('input[name=address]').val('')
+        $('input[name=website]').val('')
+        $('input[name=telp]').val('')
+        $('input[name=email]').val('')
+        $('#typeSelect').selectpicker('val', '0')
+        $('#countrySelect').selectpicker('val', '0')
+        $('#continentSelect').selectpicker('val', '0')
+    })
+
     $('#countrySelect').on('change', function(e) {
         $("#continentSelect").selectpicker("val", this.options[this.selectedIndex].dataset.continent)
     });

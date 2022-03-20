@@ -4,7 +4,7 @@ namespace App\Http\Controllers\App;
 
 use App\Http\Controllers\Controller;
 use App\Models\Contact as ModelsContact;
-use App\Models\Institute;
+use App\Models\Institution;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -27,10 +27,10 @@ class Contact extends Controller
      */
     public function index()
     {
-        $institutes = Institute::all();
+        $institutions = Institution::all();
 
         return view('app.contacts')
-            ->with('institutes', $institutes);
+            ->with('institutions', $institutions);
     }
 
     /**
@@ -43,19 +43,31 @@ class Contact extends Controller
         $contacts = ModelsContact::all();
         $data = array();
         foreach ($contacts as $contact) {
-            if (isset($contact->institute_id)) {
-                $contact->institute->country;
-            }
             $name = $contact->nickname ? $contact->fullname . ' (' . $contact->nickname . ')' : $contact->fullname;
+            $institutions = $contact->institutions;
+            $institutionIds = array();
+            $units = array();
+            $institution = null;
+
+            foreach ($institutions as $i) {
+                if (!isset($i->parent_id)) {
+                    $institution = $i;
+                } else {
+                    array_push($units, $i->name);
+                }
+                array_push($institutionIds, $i->id);
+            }
+
             $data[] = array(
                 'id' => $contact->id,
-                'type' => $contact->type,
                 'name' => $name,
                 'fullname' => $contact->fullname,
                 'nickname' => $contact->nickname,
                 'telp' => json_decode($contact->telp),
                 'email' => json_decode($contact->email),
-                'institute' => $contact->institute,
+                'institutions' => $institutionIds,
+                'units' => $units,
+                'institution' => $institution,
             );
         }
 
@@ -71,25 +83,21 @@ class Contact extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'type' => 'required',
             'fullname' => 'required',
+            'institutions' => 'required',
         ]);
 
         try {
             $data = new ModelsContact();
-            $data->type = strtoupper($request['type']);
-            $data->institute_id = $request['institute'];
             $data->fullname = $request['fullname'];
             $data->nickname = $request['nickname'];
             $data->telp = json_encode($request['telp']);
             $data->email = json_encode($request['email']);
             $data->save();
+            $data->institutions()->sync($request['institutions']);
         } catch (Exception $exception) {
-            dd($exception);
             $errorcode = $exception->getMessage();
-            if (strpos($errorcode, '23505')) {
-                return redirect()->back()->with('error', "Failed: you can not insert a duplicate data, use different Contact code!");
-            }
+            return redirect()->back()->with('error', "Failed: " . $errorcode);
         }
 
         return redirect()->back()->with('success', "Succeed: Contact added!");
@@ -105,18 +113,17 @@ class Contact extends Controller
     {
         $request->validate([
             'id' => 'required',
-            'type' => 'required',
             'fullname' => 'required',
+            'institutions' => 'required',
         ]);
 
         try {
             $data = ModelsContact::find($request['id']);
-            $data->type = strtoupper($request['type']);
-            $data->institute_id = $request['institute'];
             $data->fullname = $request['fullname'];
             $data->nickname = $request['nickname'];
             $data->telp = json_encode($request['telp']);
             $data->email = json_encode($request['email']);
+            $data->institutions()->sync($request['institutions']);
             $data->save();
         } catch (Exception $exception) {
             $errorcode = $exception->getMessage();
@@ -135,7 +142,9 @@ class Contact extends Controller
     public function delete(Request $request)
     {
         try {
-            ModelsContact::where('id', '=', $request['id'])->delete();
+            $contact = ModelsContact::find($request['id']);
+            $contact->institutions()->detach($request['institutions']);
+            $contact->delete();
         } catch (Exception $exception) {
             $errorcode = $exception->getMessage();
             return redirect()->back()->with('error', "Failed: " . $errorcode);

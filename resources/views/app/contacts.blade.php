@@ -4,7 +4,7 @@
 
 @section('content')
 <div>
-    <div class="card mb-4">
+    <div class="card shadow mb-4">
         <div class="card-header">{{ __('Console') }}</div>
         <div class="card-body">
             <button type="button" class="btn btn-primary btn-icon-split" data-bs-toggle="modal" data-bs-target="#contactModal">
@@ -15,8 +15,10 @@
             </button>
         </div>
     </div>
-    <div class="card">
-        <div class="card-header">{{ __('Table') }}</div>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">{{ __('Table') }}</h6>
+        </div>
         <div class="card-body">
             <div id="contact-table"></div>
         </div>
@@ -35,27 +37,6 @@
                     @method('post')
                     @csrf
                     <input id="id" name="id" type="hidden">
-                    <div class="form-group row mb-4">
-                        <label class="col-sm-2 col-form-label">Contact Type<b class="required">*</b>: </label>
-                        <div class="col-sm-10">
-                            <select id="contactType" name="type" class="selectpicker form-control" data-live-search="true" required>
-                                <option disabled selected>--- Select contact type ---</option>
-                                <option value="internal">Internal</option>
-                                <option value="external">External</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div id="instituteForm" class="form-group row mb-4" hidden>
-                        <label class="col-sm-2 col-form-label">Institute<b class="required">*</b>: </label>
-                        <div class="col-sm-10">
-                            <select id="instituteSelect" name="institute" class="selectpicker form-control" data-live-search="true" required>
-                                <option disabled selected>--- Select a institute from ---</option>
-                                @foreach ($institutes as $institute)
-                                <option value="{{$institute->id}}">{{$institute->name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
                     <div class="form-group row mb-4">
                         <label class="col-sm-2 col-form-label">Full Name<b class="required">*</b>: </label>
                         <div class="col-sm-10">
@@ -90,6 +71,19 @@
                             </button>
                         </div>
                     </div>
+                    <div class="form-group row mb-4">
+                        <label class="col-sm-2 col-form-label">Institutions<b class="required">*</b>: </label>
+                        <div class="col-sm-10">
+                            <select id="institutionSelect" name="institutions[]" class="selectpicker form-control" data-live-search="true" required multiple>
+                                @foreach ($institutions as $institution)
+                                @if (!isset($institution->parent_id))
+                                <option data-subtext="{{$institution->institutionType->name}}" value="{{$institution->id}}">{{$institution->name}}</option>
+                                @include('components.option-tree', ["entries"=>$institution->childInstitutions, "level"=>1])
+                                @endif
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
                     <div>
                         <div style="float: right;">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -105,6 +99,19 @@
 
 @section('script')
 <script type="text/javascript">
+    $('#contactModal').on('hidden.bs.modal', function(e) {
+        $('#contactModalTitle').html('Add Contact')
+        $('#contactForm').attr('action', "{{route('contact.store')}}");
+        $('input[name=id]').val('')
+        $('input[name=fullname]').val('')
+        $('input[name=nickname]').val('')
+        $('input[name="telp[]"]').val('')
+        $('input[name="email[]"]').val('')
+        $('#institutionSelect').selectpicker('deselectAll')
+        $('div.telps').remove()
+        $('div.emails').remove()
+    })
+
     var telpComponent =
         `<div class="form-group row mb-4 telps">
             <label class="col-sm-2 col-form-label"></label>
@@ -144,15 +151,6 @@
         $('div.emails')[idx].remove()
     });
 
-    $(document).on('change', '#contactType', function(e) {
-        var v = $('#contactType').selectpicker("val")
-        if (v == "internal") {
-            $("#instituteForm").attr('hidden', true)
-        } else {
-            $("#instituteForm").attr('hidden', false)
-        }
-    });
-
     var deleteIcon = function(cell, formatterParams) {
         return '<i style="color: #C82333" class="fa-solid fa-trash"></i>';
     };
@@ -174,18 +172,18 @@
                 visible: false,
             },
             {
-                title: "Type",
-                field: "type",
-                headerFilter: true
-            },
-            {
                 title: "Full Name (NickName)",
                 field: "name",
                 headerFilter: true
             },
             {
                 title: "Institution",
-                field: "institute.name",
+                field: "institution.name",
+                headerFilter: true
+            },
+            {
+                title: "Institution Units",
+                field: "units",
                 headerFilter: true
             },
             {
@@ -201,7 +199,6 @@
                         $('input[name=id]').val(cell.getRow().getData().id)
                         $('input[name=fullname]').val(cell.getRow().getData().fullname)
                         $('input[name=nickname]').val(cell.getRow().getData().nickname)
-                        $('#contactType').selectpicker("val", cell.getRow().getData().type.toLowerCase())
                         if (cell.getRow().getData().institute) {
                             $("#instituteForm").attr('hidden', false)
                             $('#instituteSelect').selectpicker("val", cell.getRow().getData().institute.id.toString())
@@ -216,6 +213,7 @@
                             $('input[name="email[]"]').eq(index).val(cell.getRow().getData().email[index]);
                         }
                         $('input[name="email[]"]:last').val(cell.getRow().getData().email[cell.getRow().getData().email.length - 1]);
+                        $("#institutionSelect").selectpicker("val", cell.getRow().getData().institutions.map(String))
 
                         var contactModal = new bootstrap.Modal(document.getElementById('contactModal'), {})
                         contactModal.toggle()
@@ -228,9 +226,13 @@
                     cellClick: function(e, cell) {
                         var name = cell.getRow().getData().name
                         var id = cell.getRow().getData().id
+                        var institutions = cell.getRow().getData().institutions
                         $('#confirmBoxBody').html(`Are you sure to delete "${name}"?`)
                         $('#confirmBoxForm').attr('action', "{{route('contact.delete')}}");
                         $('#confirmBoxForm').append(`<input id="contactId" name="id" type="hidden" value="${id}">`)
+                        institutions.forEach(element => {
+                            $('#confirmBoxForm').append(`<input name="institutions[]" type="hidden" value="${element}">`)
+                        });
                         var confirmBox = new bootstrap.Modal(document.getElementById('confirmBox'), {})
                         confirmBox.toggle()
                     }

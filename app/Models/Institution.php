@@ -27,6 +27,22 @@ class Institution extends Model
     }
 
     /**
+     * Get one level of parent of the Institution.
+     */
+    public function parent()
+    {
+        return $this->belongsTo(Institution::class, 'parent_id');
+    }
+
+    /**
+     * Get parents of the Institution.
+     */
+    public function parents()
+    {
+        return $this->belongsTo(Institution::class, 'parent_id')->with('parents');
+    }
+
+    /**
      * Get the type that owns the Institution.
      */
     public function institutionType()

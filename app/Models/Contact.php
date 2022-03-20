@@ -10,10 +10,10 @@ class Contact extends Model
     use HasFactory;
 
     /**
-     * Get the institute that owns the Contact
+     * The institutions that belong to the Contact.
      */
-    public function institute()
+    public function institutions()
     {
-        return $this->belongsTo(Institute::class);
+        return $this->belongsToMany(Institution::class);
     }
 }
