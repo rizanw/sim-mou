@@ -26,7 +26,7 @@ class InstitutionType extends Controller
      */
     public function index()
     {
-        return view('app.InstitutionTypes');
+        return view('app.institutionTypes');
     }
 
     /**
@@ -67,12 +67,10 @@ class InstitutionType extends Controller
             $data->save();
         } catch (Exception $exception) {
             $errorcode = $exception->getMessage();
-            if (strpos($errorcode, '23505')) {
-                return redirect()->back()->with('error', "Failed: you can not insert a duplicate data, use different InstitutionType code!");
-            }
+            return redirect()->back()->with('error', "Failed: " . $errorcode);
         }
 
-        return redirect()->back()->with('success', "Succeed: Institute Type added!");
+        return redirect()->back()->with('success', "Succeed: Institution Type added!");
     }
 
     /**
@@ -94,12 +92,10 @@ class InstitutionType extends Controller
             $data->save();
         } catch (Exception $exception) {
             $errorcode = $exception->getMessage();
-            if (strpos($errorcode, '23505')) {
-                return redirect()->back()->with('error', "Failed: you can not insert a duplicate data, use different Institute Type!");
-            }
+            return redirect()->back()->with('error', "Failed: " . $errorcode);
         }
 
-        return redirect()->back()->with('success', "Succeed: Institute Type updated!");
+        return redirect()->back()->with('success', "Succeed: Institution Type updated!");
     }
 
     /**
@@ -115,10 +111,10 @@ class InstitutionType extends Controller
         } catch (Exception $exception) {
             $errorcode = $exception->getMessage();
             if (strpos($errorcode, '23503')) {
-                return redirect()->back()->with('error', "Failed: you cannot delete Institute Type who has (a) Institute(s)");
+                return redirect()->back()->with('error', "Failed: you cannot delete Institution Type who has (a) Institute(s)");
             }
         }
 
-        return redirect()->back()->with('success', "Succeed: Institute Type deleted!");
+        return redirect()->back()->with('success', "Succeed: Institution Type deleted!");
     }
 }

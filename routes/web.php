@@ -6,6 +6,7 @@ use App\Http\Controllers\App\Country;
 use App\Http\Controllers\App\Institute;
 use App\Http\Controllers\App\InstituteType;
 use App\Http\Controllers\App\InstituteUnit;
+use App\Http\Controllers\App\InstitutionType;
 use App\Http\Controllers\App\Partner;
 use App\Http\Controllers\App\PartnerUnit;
 use Illuminate\Support\Facades\Auth;
@@ -116,21 +117,21 @@ Route::prefix('app')->middleware(['auth'])->group(function () {
             return redirect('/app/dashboard');
         });
 
-        // instituteType routes
-        Route::prefix('insitute')->group(function () {
+        // institutionTypes routes
+        Route::prefix('institution')->group(function () {
             Route::get('/', function () {
                 return redirect('/app/partner/institutions');
             });
 
-            Route::get('/types', [InstituteType::class, 'index'])->name('instituteTypes');
+            Route::get('/types', [InstitutionType::class, 'index'])->name('institutionTypes');
             Route::prefix('type')->group(function () {
                 Route::get('/', function () {
-                    return redirect('/app/miscellaneous/insitute/types');
+                    return redirect('/app/miscellaneous/institution/types');
                 });
-                Route::get('/data', [InstituteType::class, 'data'])->name('instituteType.data');
-                Route::post('/store', [InstituteType::class, 'store'])->name('instituteType.store');
-                Route::post('/update', [InstituteType::class, 'update'])->name('instituteType.update');
-                Route::post('/delete', [InstituteType::class, 'delete'])->name('instituteType.delete');
+                Route::get('/data', [InstitutionType::class, 'data'])->name('institutionType.data');
+                Route::post('/store', [InstitutionType::class, 'store'])->name('institutionType.store');
+                Route::post('/update', [InstitutionType::class, 'update'])->name('institutionType.update');
+                Route::post('/delete', [InstitutionType::class, 'delete'])->name('institutionType.delete');
             });
         });
     });

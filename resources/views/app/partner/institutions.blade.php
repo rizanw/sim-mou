@@ -49,7 +49,7 @@
                                 @endforeach
                             </select>
                             <div id="instituteTypeHelp" class="form-text">create more institution type?
-                                <a href="{{route('instituteTypes')}}" class="link-secondary">create here</a>
+                                <a href="{{route('institutionTypes')}}" class="link-secondary">create here</a>
                             </div>
                         </div>
                     </div>

@@ -1,37 +1,37 @@
 @extends('layouts.app')
 
-@section('pagetitle', 'Institute Types')
+@section('pagetitle', 'Institution Types')
 
 @section('content')
 <div>
     <div class="card mb-4">
         <div class="card-header">{{ __('Console') }}</div>
         <div class="card-body">
-            <button type="button" class="btn btn-primary btn-icon-split" data-bs-toggle="modal" data-bs-target="#instituteTypeModal">
+            <button type="button" class="btn btn-primary btn-icon-split" data-bs-toggle="modal" data-bs-target="#institutionTypeModal">
                 <span class="icon text-white-50">
                     <i class="fa-solid fa-plus"></i>
                 </span>
-                <span class="text">Add Institute Type</span>
+                <span class="text">Add Institution Type</span>
             </button>
         </div>
     </div>
     <div class="card">
         <div class="card-header">{{ __('Table') }}</div>
         <div class="card-body">
-            <div id="institute-type-table"></div>
+            <div id="institution-type-table"></div>
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="instituteTypeModal" tabindex="-1" aria-labelledby="instituteTypeModal" aria-hidden="true">
+<div class="modal fade" id="institutionTypeModal" tabindex="-1" aria-labelledby="institutionTypeModal" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="instituteTypeModalTitle">Add Institute Type</h5>
+                <h5 class="modal-title" id="institutionTypeModalTitle">Add Institution Type</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="instituteTypeForm" action="{{route('instituteType.store')}}" method="post">
+                <form id="institutionTypeForm" action="{{route('institutionType.store')}}" method="post">
                     @method('post')
                     @csrf
                     <input id="id" name="id" type="hidden">
@@ -62,7 +62,7 @@
     var editIcon = function(cell, formatterParams) {
         return '<i style="color: #4E7AE4" class="far fa-edit"></i>';
     };
-    var table = new Tabulator("#institute-type-table", {
+    var table = new Tabulator("#institution-type-table", {
         placeholder: "No data",
         layout: "fitColumns",
         pagination: "local",
@@ -89,12 +89,12 @@
                     width: 70,
                     hozAlign: "center",
                     cellClick: function(e, cell) {
-                        $('#instituteTypeModalTitle').html('Edit Institute Type')
-                        $('#instituteTypeForm').attr('action', "{{route('instituteType.update')}}");
+                        $('#institutionTypeModalTitle').html('Edit Institution Type')
+                        $('#institutionTypeForm').attr('action', "{{route('institutionType.update')}}");
                         $('input[name=name]').val(cell.getRow().getData().name)
                         $('input[name=id]').val(cell.getRow().getData().id)
-                        var instituteTypeModal = new bootstrap.Modal(document.getElementById('instituteTypeModal'), {})
-                        instituteTypeModal.toggle()
+                        var institutionTypeModal = new bootstrap.Modal(document.getElementById('institutionTypeModal'), {})
+                        institutionTypeModal.toggle()
                     }
                 }, {
                     title: "delete",
@@ -105,8 +105,8 @@
                         var name = cell.getRow().getData().name
                         var id = cell.getRow().getData().id
                         $('#confirmBoxBody').html(`Are you sure to delete "(${id})${name}"?`)
-                        $('#confirmBoxForm').attr('action', "{{route('instituteType.delete')}}");
-                        $('#confirmBoxForm').append(`<input id="instituteTypeId" name="id" type="hidden" value="${id}">`)
+                        $('#confirmBoxForm').attr('action', "{{route('institutionType.delete')}}");
+                        $('#confirmBoxForm').append(`<input id="institutionTypeId" name="id" type="hidden" value="${id}">`)
                         var confirmBox = new bootstrap.Modal(document.getElementById('confirmBox'), {})
                         confirmBox.toggle()
                     }
@@ -115,7 +115,7 @@
         ]
     });
     table.on("tableBuilt", function() {
-        table.setData("{{route('instituteType.data')}}");
+        table.setData("{{route('institutionType.data')}}");
 
         $('input[type=search]').attr("placeholder", "search..");
         $('input[type=search]').addClass('form-control');
