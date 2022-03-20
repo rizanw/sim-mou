@@ -18,7 +18,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             ContinentsSeeder::class,
             CountriesSeeder::class,
-            InstituteTypeSeeder::class
+            InstituteTypeSeeder::class,
+            DocumentTypeSeeder::class
         ]);
     }
 }
