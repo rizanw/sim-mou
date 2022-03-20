@@ -15,18 +15,16 @@ return new class extends Migration
     {
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
-            $table->integer('document_type_id');
+            $table->unsignedBigInteger('document_type_id');
             $table->string('number');
             $table->string('title');
-            $table->string('desc');
+            $table->text('desc')->nullable();
             $table->date('start_date');
             $table->date('end_date');
-            $table->string('file');
-            $table->integer('institute_id');
+            $table->string('file')->nullable();
 
             $table->timestamps();
             $table->foreign('document_type_id')->references('id')->on('document_types');
-            $table->foreign('institute_id')->references('id')->on('institutes');
         });
     }
 

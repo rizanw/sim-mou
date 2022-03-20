@@ -13,18 +13,22 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('institutes', function (Blueprint $table) {
+        Schema::create('institutions', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('institution_type_id')->nullable();
             $table->string('name');
+            $table->string('label');
+            $table->string('country_id')->nullable();
             $table->string('address')->nullable();
             $table->string('telp')->nullable();
             $table->string('email')->nullable();
             $table->string('website')->nullable();
-            $table->integer('institute_type_id');
-            $table->string('country_id', 2);
+            $table->unsignedBigInteger('parent_id')->nullable();
+            $table->boolean('is_partner');
 
             $table->timestamps();
-            $table->foreign('institute_type_id')->references('id')->on('institute_types');
+            $table->foreign('parent_id')->references('id')->on('institutions');
+            $table->foreign('institution_type_id')->references('id')->on('institution_types');
             $table->foreign('country_id')->references('id')->on('countries');
         });
     }
@@ -36,6 +40,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('institutes');
+        Schema::dropIfExists('institutions');
     }
 };

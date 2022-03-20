@@ -6,7 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class InstituteTypeSeeder extends Seeder
+class InstitutionTypeSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,7 +15,7 @@ class InstituteTypeSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('institute_types')->insert([
+        DB::table('institution_types')->insert([
             ['name' => 'University'],
             ['name' => 'Company'],
             ['name' => 'Institution'],
