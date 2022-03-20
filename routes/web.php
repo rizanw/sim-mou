@@ -6,6 +6,8 @@ use App\Http\Controllers\App\Country;
 use App\Http\Controllers\App\Institute;
 use App\Http\Controllers\App\InstituteType;
 use App\Http\Controllers\App\InstituteUnit;
+use App\Http\Controllers\App\Partner;
+use App\Http\Controllers\App\PartnerUnit;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -37,31 +39,31 @@ Route::prefix('app')->middleware(['auth'])->group(function () {
     // Partner routes
     Route::prefix('partner')->group(function () {
         Route::get('/', function () {
-            return redirect('/app/dashboard');
+            return redirect('/app/partner/institutions');
         });
 
         // Institute routes
-        Route::get('/institutions', [Institute::class, 'index'])->name('institutions');
+        Route::get('/institutions', [Partner::class, 'index'])->name('institutions');
         Route::prefix('institution')->group(function () {
             Route::get('/', function () {
                 return redirect('/app/institutions');
             });
-            Route::get('/data', [Institute::class, 'data'])->name('institution.data');
-            Route::post('/store', [Institute::class, 'store'])->name('institution.store');
-            Route::post('/update', [Institute::class, 'update'])->name('institution.update');
-            Route::post('/delete', [Institute::class, 'delete'])->name('institution.delete');
-        });
+            Route::get('/data', [Partner::class, 'data'])->name('institution.data');
+            Route::post('/store', [Partner::class, 'store'])->name('institution.store');
+            Route::post('/update', [Partner::class, 'update'])->name('institution.update');
+            Route::post('/delete', [Partner::class, 'delete'])->name('institution.delete');
 
-        // Unit routes
-        Route::get('/units', [InstituteUnit::class, 'index'])->name('units');
-        Route::prefix('unit')->group(function () {
-            Route::get('/', function () {
-                return redirect('/app/units');
+            // Unit routes
+            Route::get('/{id}/units', [PartnerUnit::class, 'index'])->name('units');
+            Route::get('/{id}/unit/data', [PartnerUnit::class, 'data'])->name('unit.data');
+            Route::prefix('unit')->group(function () {
+                Route::get('/', function () {
+                    return redirect('/app/partner/institutions');
+                });
+                Route::post('/store', [PartnerUnit::class, 'store'])->name('unit.store');
+                Route::post('/update', [PartnerUnit::class, 'update'])->name('unit.update');
+                Route::post('/delete', [PartnerUnit::class, 'delete'])->name('unit.delete');
             });
-            Route::get('/data', [InstituteUnit::class, 'data'])->name('unit.data');
-            Route::post('/store', [InstituteUnit::class, 'store'])->name('unit.store');
-            Route::post('/update', [InstituteUnit::class, 'update'])->name('unit.update');
-            Route::post('/delete', [InstituteUnit::class, 'delete'])->name('unit.delete');
         });
     });
 

@@ -12,7 +12,7 @@ class Institution extends Model
     /**
      * Get one level of child the Institution.
      */
-    public function institutionChilds()
+    public function institutions()
     {
         return $this->hasMany(Institution::class, 'parent_id');
     }
@@ -21,9 +21,9 @@ class Institution extends Model
      * Get childs of the Institution.
      * recursive relationship
      */
-    public function allInstitutionChilds()
+    public function childInstitutions()
     {
-        return $this->hasMany(Institution::class, 'parent_id')->with('institutionChilds');
+        return $this->hasMany(Institution::class, 'parent_id')->with('institutions');
     }
 
     /**

@@ -28,7 +28,6 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Partner data:</h6>
                 <a class="collapse-item {{ request()->is('app/partner/institutions') ? 'active' : '' }}" href="{{route('institutions')}}">Institutions</a>
-                <a class="collapse-item {{ request()->is('app/partner/units') ? 'active' : '' }}" href="{{route('units')}}">Units</a>
             </div>
         </div>
     </li>
