@@ -151,6 +151,7 @@ class Partner extends Controller
             if (strpos($errorcode, '23503')) {
                 return redirect()->back()->with('error', "Failed: you cannot delete Institution who has (a) Unit(s)");
             }
+            return redirect()->back()->with('error', "Failed: " . $errorcode);
         }
 
         return redirect()->back()->with('success', "Succeed: Institution deleted!");

@@ -109,6 +109,7 @@ class Country extends Controller
             if (strpos($errorcode, '23505')) {
                 return redirect()->back()->with('error', "Failed: you can not insert a duplicate data, use different country code!");
             }
+            return redirect()->back()->with('error', "Failed: " . $errorcode);
         }
 
         return redirect()->back()->with('success', "Succeed: country updated!");
@@ -129,6 +130,7 @@ class Country extends Controller
             if (strpos($errorcode, '23503')) {
                 return redirect()->back()->with('error', "Failed: you cannot delete continents who has (a) country(s)");
             }
+            return redirect()->back()->with('error', "Failed: " . $errorcode);
         }
 
         return redirect()->back()->with('success', "Succeed: country deleted!");

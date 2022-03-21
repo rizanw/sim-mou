@@ -19,7 +19,8 @@ class DatabaseSeeder extends Seeder
             ContinentsSeeder::class,
             CountriesSeeder::class,
             InstitutionTypeSeeder::class,
-            DocumentTypeSeeder::class
+            DocumentTypeSeeder::class,
+            InstitutionSeeder::class,
         ]);
     }
 }

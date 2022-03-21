@@ -67,7 +67,7 @@
         <div id="collapseMiscellaneous" class="collapse {{ request()->is('app/miscellaneous/*') ? 'show' : '' }}" aria-labelledby="headingMiscellaneous" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Institution:</h6>
-                <a class="collapse-item {{ request()->is('app/miscellaneous/institution/types') ? 'active' : '' }}" href="{{ route('institutionTypes') }}">Types</a>
+                <a class="collapse-item {{ request()->is('app/miscellaneous/institution/types') ? 'active' : '' }}" href="{{ route('institutionTypes') }}">Institution Types</a>
             </div>
         </div>
     </li>

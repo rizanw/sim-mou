@@ -110,9 +110,7 @@ class InstitutionType extends Controller
             ModelsInstitutionType::where('id', '=', $request['id'])->delete();
         } catch (Exception $exception) {
             $errorcode = $exception->getMessage();
-            if (strpos($errorcode, '23503')) {
-                return redirect()->back()->with('error', "Failed: you cannot delete Institution Type who has (a) Institute(s)");
-            }
+            return redirect()->back()->with('error', "Failed: " . $errorcode);
         }
 
         return redirect()->back()->with('success', "Succeed: Institution Type deleted!");

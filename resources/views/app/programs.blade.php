@@ -65,6 +65,7 @@
     $('#programModal').on('hidden.bs.modal', function(e) {
         $('#programModalTitle').html('Add Program')
         $('#programForm').attr('action', "{{route('program.store')}}");
+        $('input[name=id]').val("")
         $('input[name=name]').val("")
         $('input[name=desc], textarea').html("")
     })

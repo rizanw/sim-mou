@@ -56,6 +56,13 @@
 
 @section('script')
 <script type="text/javascript">
+    $('#institutionTypeModal').on('hidden.bs.modal', function(e) {
+        $('#institutionTypeModalTitle').html('Add Institution Type')
+        $('#institutionTypeForm').attr('action', "{{route('institutionType.store')}}");
+        $('input[name=name]').val("")
+        $('input[name=id]').val("")
+    })
+
     var deleteIcon = function(cell, formatterParams) {
         return '<i style="color: #C82333" class="fa-solid fa-trash"></i>';
     };
