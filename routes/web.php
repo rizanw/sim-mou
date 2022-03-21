@@ -3,9 +3,7 @@
 use App\Http\Controllers\App\Contact;
 use App\Http\Controllers\App\Continent;
 use App\Http\Controllers\App\Country;
-use App\Http\Controllers\App\Institute;
-use App\Http\Controllers\App\InstituteType;
-use App\Http\Controllers\App\InstituteUnit;
+use App\Http\Controllers\App\DocumentType;
 use App\Http\Controllers\App\InstitutionType;
 use App\Http\Controllers\App\Partner;
 use App\Http\Controllers\App\PartnerUnit;
@@ -145,6 +143,24 @@ Route::prefix('app')->middleware(['auth'])->group(function () {
                 Route::post('/store', [InstitutionType::class, 'store'])->name('institutionType.store');
                 Route::post('/update', [InstitutionType::class, 'update'])->name('institutionType.update');
                 Route::post('/delete', [InstitutionType::class, 'delete'])->name('institutionType.delete');
+            });
+        });
+
+        // DocumentType routes
+        Route::prefix('document')->group(function () {
+            Route::get('/', function () {
+                return redirect('/app/documents');
+            });
+
+            Route::get('/types', [DocumentType::class, 'index'])->name('documentTypes');
+            Route::prefix('type')->group(function () {
+                Route::get('/', function () {
+                    return redirect('/app/miscellaneous/document/types');
+                });
+                Route::get('/data', [DocumentType::class, 'data'])->name('documentType.data');
+                Route::post('/store', [DocumentType::class, 'store'])->name('documentType.store');
+                Route::post('/update', [DocumentType::class, 'update'])->name('documentType.update');
+                Route::post('/delete', [DocumentType::class, 'delete'])->name('documentType.delete');
             });
         });
     });

@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class DocumentType extends Model
 {
     use HasFactory;
+
+    /**
+     * Get the documents for the DocumentType.
+     */
+    public function documents()
+    {
+        return $this->hasMany(Document::class);
+    }
 }

@@ -68,6 +68,8 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Institution:</h6>
                 <a class="collapse-item {{ request()->is('app/miscellaneous/institution/types') ? 'active' : '' }}" href="{{ route('institutionTypes') }}">Institution Types</a>
+                <h6 class="collapse-header">Document:</h6>
+                <a class="collapse-item {{ request()->is('app/miscellaneous/document/types') ? 'active' : '' }}" href="{{ route('documentTypes') }}">Document Types</a>
             </div>
         </div>
     </li>
