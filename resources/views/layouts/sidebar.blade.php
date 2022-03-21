@@ -21,7 +21,7 @@
     </li>
     <li class="nav-item {{ request()->is('app/partner/*') ? 'active' : '' }}">
         <a class="nav-link {{ request()->is('app/partner/*') ? '' : 'collapsed' }}" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePartner" aria-expanded="true" aria-controls="collapsePartner">
-            <i class="fa-solid fa-handshake-simple"></i>
+            <i class="fa-solid fa-building-columns"></i>
             <span>Partners</span>
         </a>
         <div id="collapsePartner" class="collapse {{ request()->is('app/partner/*') ? 'show' : '' }}" aria-labelledby="headingPartner" data-parent="#accordionSidebar">
@@ -35,6 +35,12 @@
         <a class="nav-link" href="{{route('contacts')}}">
             <i class="fa-solid fa-address-book"></i>
             <span>Contacts</span>
+        </a>
+    </li>
+    <li class="nav-item {{ request()->is('app/programs') ? 'active' : '' }}">
+        <a class="nav-link" href="{{route('programs')}}">
+            <i class="fa-solid fa-object-group"></i>
+            <span>Programs</span>
         </a>
     </li>
     <hr class="sidebar-divider">

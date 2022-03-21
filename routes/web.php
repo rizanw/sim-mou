@@ -9,6 +9,7 @@ use App\Http\Controllers\App\InstituteUnit;
 use App\Http\Controllers\App\InstitutionType;
 use App\Http\Controllers\App\Partner;
 use App\Http\Controllers\App\PartnerUnit;
+use App\Http\Controllers\App\Program;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -78,6 +79,18 @@ Route::prefix('app')->middleware(['auth'])->group(function () {
         Route::post('/store', [Contact::class, 'store'])->name('contact.store');
         Route::post('/update', [Contact::class, 'update'])->name('contact.update');
         Route::post('/delete', [Contact::class, 'delete'])->name('contact.delete');
+    });
+
+    // Program routes
+    Route::get('/programs', [Program::class, 'index'])->name('programs');
+    Route::prefix('program')->group(function () {
+        Route::get('/', function () {
+            return redirect('/app/programs');
+        });
+        Route::get('/data', [Program::class, 'data'])->name('program.data');
+        Route::post('/store', [Program::class, 'store'])->name('program.store');
+        Route::post('/update', [Program::class, 'update'])->name('program.update');
+        Route::post('/delete', [Program::class, 'delete'])->name('program.delete');
     });
 
     // Area routes
