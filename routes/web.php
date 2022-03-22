@@ -3,6 +3,7 @@
 use App\Http\Controllers\App\Contact;
 use App\Http\Controllers\App\Continent;
 use App\Http\Controllers\App\Country;
+use App\Http\Controllers\App\Document;
 use App\Http\Controllers\App\DocumentType;
 use App\Http\Controllers\App\InstitutionType;
 use App\Http\Controllers\App\Partner;
@@ -35,6 +36,20 @@ Route::prefix('app')->middleware(['auth'])->group(function () {
         return redirect('/app/dashboard');
     });
     Route::get('/dashboard', [\App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
+
+    // Document routes
+    Route::get('/documents', [Document::class, 'index'])->name('documents');
+    Route::prefix('document')->group(function () {
+        Route::get('/', function () {
+            return redirect('/app/documents');
+        });
+        Route::get('/data', [Document::class, 'data'])->name('document.data');
+        Route::post('/delete', [Document::class, 'delete'])->name('document.delete');
+        Route::get('/{id}/download', [Document::class, 'download'])->name('document.download');
+
+        Route::get('/create', [Document::class, 'createView'])->name('document.create');
+        Route::post('/store', [Document::class, 'store'])->name('document.store');
+    });
 
     // Partner routes
     Route::prefix('partner')->group(function () {

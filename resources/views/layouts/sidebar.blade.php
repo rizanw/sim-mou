@@ -14,7 +14,7 @@
         </a>
     </li>
     <li class="nav-item {{ request()->is('home/documents') ? 'active' : '' }}">
-        <a class="nav-link" href="{{route('home')}}">
+        <a class="nav-link" href="{{route('documents')}}">
             <i class="fa-solid fa-file-contract"></i>
             <span>Documents</span>
         </a>
