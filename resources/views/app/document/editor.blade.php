@@ -15,7 +15,7 @@
             <div class="form-group row mb-4">
                 <label class="col-sm-2 col-form-label">Status<b class="required">*</b>:</label>
                 <div class="col-sm-10">
-                    <select id="status" name="status" class="selectpicker form-control" data-live-search="true" required>
+                    <select id="status" name="status" class="selectpicker form-control" data-live-search="true" required {{isset($isReadonly)?'disabled':''}}>
                         <option value="0" disabled selected>--- Select a Document Status ---</option>
                         @foreach ($statuses as $status)
                         @if (isset($document) && $document->status == $status)
@@ -31,7 +31,7 @@
                 <label class="col-sm-2 col-form-label">Start Date<b class="required">*</b>:</label>
                 <div class="col-sm-10">
                     <div class="input-group date">
-                        <input id="startdate" name="startdate" value="{{isset($document)?$document->start_date:''}}" type="text" class="form-control" placeholder="click to select the start date" autocomplete="off" required>
+                        <input id="startdate" name="startdate" value="{{isset($document)?$document->start_date:''}}" type="text" class="form-control" placeholder="click to select the start date" autocomplete="off" required {{isset($isReadonly)?'disabled':''}}>
                         <span class="input-group-text">
                             <i class="fa-solid fa-calendar"></i>
                         </span>
@@ -42,7 +42,7 @@
                 <label class="col-sm-2 col-form-label">End Date<b class="required">*</b>:</label>
                 <div class="col-sm-10">
                     <div class="input-group date">
-                        <input id="enddate" name="enddate" value="{{isset($document)?$document->end_date:''}}" type="text" class="form-control" placeholder="click to select the end date" autocomplete="off">
+                        <input id="enddate" name="enddate" value="{{isset($document)?$document->end_date:''}}" type="text" class="form-control" placeholder="click to select the end date" autocomplete="off" {{isset($isReadonly)?'disabled':''}}>
                         <span class="input-group-text">
                             <i class="fa-solid fa-calendar"></i>
                         </span>
@@ -59,7 +59,7 @@
             <div class="form-group row mb-4">
                 <label class="col-sm-2 col-form-label">Document Type<b class="required">*</b>:</label>
                 <div class="col-sm-10">
-                    <select id="document-type" name="document-type" class="selectpicker form-control" data-live-search="true" required>
+                    <select id="document-type" name="document-type" class="selectpicker form-control" data-live-search="true" required {{isset($isReadonly)?'disabled':''}}>
                         <option value="0" disabled selected>--- Select a Document Type ---</option>
                         @foreach ($documentTypes as $documentType)
                         @if (isset($document) && $document->documentType->shortname == $documentType->shortname)
@@ -74,19 +74,19 @@
             <div class="form-group row mb-4">
                 <label class="col-sm-2 col-form-label">Document Number<b class="required">*</b>: </label>
                 <div class="col-sm-10">
-                    <input id="number" name="number" value="{{isset($document)?$document->number:''}}" class="form-control" type="text" placeholder="ex: B.07.1/Ma.13.22.02/PP.00.6/01/2022" required>
+                    <input id="number" name="number" value="{{isset($document)?$document->number:''}}" class="form-control" type="text" placeholder="ex: B.07.1/Ma.13.22.02/PP.00.6/01/2022" required {{isset($isReadonly)?'disabled':''}}>
                 </div>
             </div>
             <div class="form-group row mb-4">
                 <label class="col-sm-2 col-form-label">Document Title<b class="required">*</b>: </label>
                 <div class="col-sm-10">
-                    <input id="title" name="title" value="{{isset($document)?$document->title:''}}" class="form-control" type="text" placeholder="ex: Agreement For Establishment of International ..." required>
+                    <input id="title" name="title" value="{{isset($document)?$document->title:''}}" class="form-control" type="text" placeholder="ex: Agreement For Establishment of International ..." required {{isset($isReadonly)?'disabled':''}}>
                 </div>
             </div>
             <div class="form-group row mb-4">
                 <label class="col-sm-2 col-form-label">Description: </label>
                 <div class="col-sm-10">
-                    <textarea id="desc" name="desc" class="form-control" rows="6">{{isset($document)?$document->desc:''}}</textarea>
+                    <textarea id="desc" name="desc" class="form-control" rows="6" {{isset($isReadonly)?'disabled':''}}>{{isset($document)?$document->desc:''}}</textarea>
                 </div>
             </div>
             <div class="form-group row mb-4">
@@ -118,7 +118,7 @@
             <div class="form-group row mb-4">
                 <label class="col-sm-2 col-form-label">Institution<b class="required">*</b>:</label>
                 <div class="col-sm-10">
-                    <select id="institution-1" name="institution[1][]" class="selectpicker form-control select-institution" data-live-search="true" required>
+                    <select id="institution-1" name="institution[1][]" class="selectpicker form-control select-institution" data-live-search="true" required {{isset($isReadonly)?'disabled':''}}>
                         <option disabled selected>--- Select an Institution ---</option>
                         @foreach ($institutions as $institution)
                         @if (isset($docInstituions[0]) && in_array($institution->id, $docInstituions[0]))
@@ -133,8 +133,19 @@
             <div class="form-group row mb-4">
                 <label class="col-sm-2 col-form-label">Units:</label>
                 <div class="col-sm-10">
-                    <select id="unit-1" name="units[1][]" class="selectpicker form-control select-unit" data-live-search="true" multiple>
-                    </select>
+                    @if (isset($isReadonly) && isset($docUnits))
+                    <div style="margin-top: 8px;">
+                        @foreach($docUnits as $key => $docUnit)
+                        @if ($docUnit[0][0] == 1)
+                        <li>
+                            {{ $docUnit[1][0]->name }}
+                        </li>
+                        @endif
+                        @endforeach
+                    </div>
+                    @else
+                    <select id="unit-1" name="units[1][]" class="selectpicker form-control select-unit" data-live-search="true" multiple></select>
+                    @endif
                 </div>
             </div>
             <hr />
@@ -146,7 +157,7 @@
             <div class="form-group row mb-4">
                 <label class="col-sm-2 col-form-label">Institution<b class="required">*</b>:</label>
                 <div class="col-sm-10">
-                    <select id="institution-2" name="institution[2][]" class="selectpicker form-control select-institution" data-live-search="true" required>
+                    <select id="institution-2" name="institution[2][]" class="selectpicker form-control select-institution" data-live-search="true" required {{isset($isReadonly)?'disabled':''}}>
                         <option disabled selected>--- Select an Institution ---</option>
                         @foreach ($institutions as $institution)
                         @if (isset($docInstituions[1]) && in_array($institution->id, $docInstituions[1]))
@@ -161,8 +172,19 @@
             <div class="form-group row mb-4">
                 <label class="col-sm-2 col-form-label">Units:</label>
                 <div class="col-sm-10">
-                    <select id="unit-2" name="units[2][]" class="selectpicker form-control select-unit" data-live-search="true" multiple>
-                    </select>
+                    @if (isset($isReadonly) && isset($docUnits))
+                    <div style="margin-top: 8px;">
+                        @foreach($docUnits as $key => $docUnit)
+                        @if ($docUnit[0][0] == 2)
+                        <li>
+                            {{ $docUnit[1][0]->name }}
+                        </li>
+                        @endif
+                        @endforeach
+                    </div>
+                    @else
+                    <select id="unit-2" name="units[2][]" class="selectpicker form-control select-unit" data-live-search="true" multiple></select>
+                    @endif
                 </div>
             </div>
         </div>
@@ -183,19 +205,23 @@
                 </div>
             </div>
             @endif
+            @if (!isset($isReadonly))
             <div class="form-group row mb-4">
                 <label class="col-sm-2 col-form-label">{{(isset($document)?'Replace Document':'Upload<b class="required">*</b>')}}:</label>
                 <div class="col-sm-10">
                     <input name="document" type="file" class="form-control" aria-label="file" accept="application/pdf" {{(isset($document)?'':'required')}}>
                 </div>
             </div>
+            @endif
         </div>
     </div>
     <div class="card shadow mb-4">
         <div class="card-body">
             <div style="float: right;">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a href="{{route('documents')}}" class="btn btn-secondary">Cancel/Back</a>
+                @if (!isset($isReadonly))
                 <button type="submit" class="btn btn-primary">Save changes</button>
+                @endif
             </div>
         </div>
     </div>
@@ -248,7 +274,7 @@
             var url = '{{ route("unit.data", ":id") }}';
             url = url.replace(':id', institutions[idx][parties[0]].toString());
             var iu = [];
-            console.log(url,institutions[idx][parties[0]])
+            console.log(url, institutions[idx][parties[0]])
             units.forEach((unit, i) => {
                 if (parties[0] == units[i][0]) {
                     console.log(units[i][1][0], parties[0])

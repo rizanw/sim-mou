@@ -292,6 +292,64 @@ class Document extends Controller
     }
 
     /**
+     * Show the detail of Document.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function detailView($id)
+    {
+        $statuses = array(
+            $this->documentStatusActive,
+            $this->documentStatusInactive,
+            $this->documentStatusInRenewal,
+            $this->documentStatusExpired
+        );
+        $documentTypes = DocumentType::all();
+        $programs = Program::all();
+        $institutions = Institution::where('parent_id', null)->get();
+        $partners = Institution::where([['is_partner', true], ['parent_id', null]])->get();
+        $url = \route('document.update');
+
+        $document = ModelsDocument::where('id', $id)->first();
+        $startdate = explode("-", $document->start_date);
+        $document->start_date = $startdate[1] . "/" . $startdate[2] . "/" . $startdate[0];
+        $enddate = explode("-", $document->end_date);
+        $document->end_date = $enddate[1] . "/" . $enddate[2] . "/" . $enddate[0];
+
+        $docPrograms = array();
+        foreach ($document->programs as $val) {
+            array_push($docPrograms, $val->id);
+        }
+
+        $docUnits = array();
+        $docInstituions = array();
+        $insti = $document->institutions()->orderBy('party')->get();
+        foreach ($insti as $val) {
+            if (isset($val->parent_id)) {
+                $docUnits[] = array(array($val->pivot->party), array($val));
+            } else {
+                $docInstituions[] = array($val->pivot->party => $val->id);
+            }
+        }
+
+        $isReadonly = true;
+
+        return view('app.document.editor')
+            ->with('pageTitle', 'Document ' . $document->number)
+            ->with('url', $url)
+            ->with('isReadonly', $isReadonly)
+            ->with('document', $document)
+            ->with('docPrograms', $docPrograms)
+            ->with('docUnits', $docUnits)
+            ->with('docInstituions', $docInstituions)
+            ->with('institutions', $institutions)
+            ->with('partners', $partners)
+            ->with('programs', $programs)
+            ->with('documentTypes', $documentTypes)
+            ->with('statuses', $statuses);
+    }
+
+    /**
      * download Documents data from database application
      * @param Int $id 
      * @return String

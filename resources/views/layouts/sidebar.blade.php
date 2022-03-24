@@ -13,7 +13,7 @@
             <span>Dashboard</span>
         </a>
     </li>
-    <li class="nav-item {{ request()->is('home/documents') ? 'active' : '' }}">
+    <li class="nav-item {{ request()->is('app/document*') ? 'active' : '' }}">
         <a class="nav-link" href="{{route('documents')}}">
             <i class="fa-solid fa-file-contract"></i>
             <span>Documents</span>

@@ -34,6 +34,9 @@
     var editIcon = function(cell, formatterParams) {
         return '<i style="color: #4E7AE4" class="far fa-edit"></i>';
     };
+    var showIcon = function(cell, formatterParams) {
+        return '<i style="color: #4E7AE4" class="fa-solid fa-eye"></i>';
+    };
     var table = new Tabulator("#document-table", {
         placeholder: "No data",
         layout: "fitColumns",
@@ -87,6 +90,16 @@
             {
                 title: "Action",
                 columns: [{
+                    title: "show",
+                    formatter: showIcon,
+                    width: 70,
+                    hozAlign: "center",
+                    cellClick: function(e, cell) {
+                        var url = '{{ route("document.detail", ":id") }}';
+                        url = url.replace(':id', cell.getRow().getData().id.toString());
+                        location.href = url
+                    }
+                }, {
                     title: "edit",
                     formatter: editIcon,
                     width: 70,

@@ -45,13 +45,15 @@ Route::prefix('app')->middleware(['auth'])->group(function () {
         });
         Route::get('/data', [Document::class, 'data'])->name('document.data');
         Route::post('/delete', [Document::class, 'delete'])->name('document.delete');
-        Route::get('/{id}/download', [Document::class, 'download'])->name('document.download');
-
+        
         Route::get('/create', [Document::class, 'createView'])->name('document.create');
         Route::post('/store', [Document::class, 'store'])->name('document.store');
 
         Route::get('/{id}/edit', [Document::class, 'editView'])->name('document.edit');
         Route::post('/update', [Document::class, 'update'])->name('document.update');
+
+        Route::get('/{id}', [Document::class, 'detailView'])->name('document.detail');
+        Route::get('/{id}/download', [Document::class, 'download'])->name('document.download');
     });
 
     // Partner routes
