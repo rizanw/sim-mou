@@ -86,7 +86,10 @@ class Document extends Controller
     public function delete(Request $request)
     {
         try {
-            ModelsDocument::where('id', '=', $request['id'])->delete();
+            $data = ModelsDocument::find($request['id']);
+            $data->programs()->detach();
+            $data->institutions()->detach();
+            $data->delete();
         } catch (Exception $exception) {
             $errorcode = $exception->getMessage();
             return redirect()->back()->with('error', "Failed: " . $errorcode);
@@ -139,11 +142,12 @@ class Document extends Controller
             'enddate' => 'required',
             'number' => 'required',
             'title' => 'required',
+            'file' => 'required',
         ]);
 
         try {
             $name = preg_replace("/[^a-zA-Z0-9]+/", "", $request['number']) . "_" . time() . ".pdf";
-            $path = $request->document->storeAs($this->folder, $name);
+            $request->document->storeAs($this->folder, $name);
 
             $data = new ModelsDocument();
             $data->status = $request['status'];
@@ -171,6 +175,62 @@ class Document extends Controller
         return redirect()->back()->with('success', "Succeed: Document added!");
     }
 
+
+    /**
+     * Show the application Document editor.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function editView($id)
+    {
+        $statuses = array(
+            $this->documentStatusActive,
+            $this->documentStatusInactive,
+            $this->documentStatusInRenewal,
+            $this->documentStatusExpired
+        );
+        $documentTypes = DocumentType::all();
+        $programs = Program::all();
+        $institutions = Institution::where('parent_id', null)->get();
+        $partners = Institution::where([['is_partner', true], ['parent_id', null]])->get();
+        $url = \route('document.update');
+
+        $document = ModelsDocument::where('id', $id)->first();
+        $startdate = explode("-", $document->start_date);
+        $document->start_date = $startdate[1] . "/" . $startdate[2] . "/" . $startdate[0];
+        $enddate = explode("-", $document->end_date);
+        $document->end_date = $enddate[1] . "/" . $enddate[2] . "/" . $enddate[0];
+
+        $docPrograms = array();
+        foreach ($document->programs as $val) {
+            array_push($docPrograms, $val->id);
+        }
+
+        $docUnits = array();
+        $docInstituions = array();
+        $insti = $document->institutions()->orderBy('party')->get();
+        foreach ($insti as $val) {
+            if (isset($val->parent_id)) {
+                $docUnits[] = array(array($val->pivot->party), array($val->id));
+            } else {
+                $docInstituions[] = array($val->pivot->party => $val->id);
+            }
+        }
+
+        return view('app.document.editor')
+            ->with('pageTitle', 'Edit Document')
+            ->with('url', $url)
+            ->with('document', $document)
+            ->with('docPrograms', $docPrograms)
+            ->with('docUnits', $docUnits)
+            ->with('docInstituions', $docInstituions)
+            ->with('institutions', $institutions)
+            ->with('partners', $partners)
+            ->with('programs', $programs)
+            ->with('documentTypes', $documentTypes)
+            ->with('statuses', $statuses);
+    }
+
     /**
      * update Document data to the database application
      *
@@ -181,12 +241,48 @@ class Document extends Controller
     {
         $request->validate([
             'id' => 'required',
-            'name' => 'required',
+            'status' => 'required',
+            'document-type' => 'required',
+            'startdate' => 'required',
+            'enddate' => 'required',
+            'number' => 'required',
+            'title' => 'required',
         ]);
 
         try {
             $data = ModelsDocument::find($request['id']);
+            $data->status = $request['status'];
+            $data->start_date = $request['startdate'];
+            $data->end_date = $request['enddate'];
+            $data->document_type_id = $request['document-type'];
+            $data->number = $request['number'];
+            $data->title = $request['title'];
+            $data->desc = $request['desc'];
+
+            if (isset($request->document)) {
+                $name = preg_replace("/[^a-zA-Z0-9]+/", "", $request['number']) . "_" . time() . ".pdf";
+                $request->document->storeAs($this->folder, $name);
+                $data->file = $name;
+            }
+
             $data->save();
+
+            $data->institutions()->detach();
+            $data->programs()->sync($request['programs']);
+
+            if (isset($request['institution']) || isset($request['units'])) {
+                $data->institutions()->detach();
+                if (isset($request['institution'])) {
+                    foreach ($request['institution'] as $key => $val) {
+                        $data->institutions()->attach($val, ['party' => $key]);
+                    }
+                }
+                if (isset($request['units'])) {
+                    foreach ($request['units'] as $key => $val) {
+                        $data->institutions()->attach($val, ['party' => $key]);
+                    }
+                }
+            }
         } catch (Exception $exception) {
             $errorcode = $exception->getMessage();
             return redirect()->back()->with('error', "Failed: " . $errorcode);

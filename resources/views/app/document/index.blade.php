@@ -92,7 +92,9 @@
                     width: 70,
                     hozAlign: "center",
                     cellClick: function(e, cell) {
-                        // todo: redirect to editor form
+                        var url = '{{ route("document.edit", ":id") }}';
+                        url = url.replace(':id', cell.getRow().getData().id.toString());
+                        location.href = url;
                     }
                 }, {
                     title: "delete",
@@ -100,9 +102,10 @@
                     width: 70,
                     hozAlign: "center",
                     cellClick: function(e, cell) {
-                        var name = cell.getRow().getData().name
+                        var title = cell.getRow().getData().title
+                        var number = cell.getRow().getData().number
                         var id = cell.getRow().getData().id
-                        $('#confirmBoxBody').html(`Are you sure to delete "${name}"?`)
+                        $('#confirmBoxBody').html(`Are you sure to delete "(${number})${title}"?`)
                         $('#confirmBoxForm').attr('action', "{{route('document.delete')}}");
                         $('#confirmBoxForm').append(`<input id="documentId" name="id" type="hidden" value="${id}">`)
                         var confirmBox = new bootstrap.Modal(document.getElementById('confirmBox'), {})

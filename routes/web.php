@@ -49,6 +49,9 @@ Route::prefix('app')->middleware(['auth'])->group(function () {
 
         Route::get('/create', [Document::class, 'createView'])->name('document.create');
         Route::post('/store', [Document::class, 'store'])->name('document.store');
+
+        Route::get('/{id}/edit', [Document::class, 'editView'])->name('document.edit');
+        Route::post('/update', [Document::class, 'update'])->name('document.update');
     });
 
     // Partner routes

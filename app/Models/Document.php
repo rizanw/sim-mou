@@ -32,6 +32,6 @@ class Document extends Model
      */
     public function institutions()
     {
-        return $this->belongsToMany(Institution::class, 'documents_institutions', 'document_id', 'institution_id');
+        return $this->belongsToMany(Institution::class, 'documents_institutions', 'document_id', 'institution_id')->withPivot('party');;
     }
 }
