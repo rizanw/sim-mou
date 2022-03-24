@@ -4,6 +4,72 @@
 
 @section('content')
 <div>
+    <div class="row">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Active</div>
+                            <div id="active" class="h5 mb-0 font-weight-bold text-gray-800">0</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa-solid fa-file-circle-check fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">In Renewal</div>
+                            <div id="inrenewal" class="h5 mb-0 font-weight-bold text-gray-800">0</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa-solid fa-arrow-rotate-left fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Expired</div>
+                            <div id="expired" class="h5 mb-0 font-weight-bold text-gray-800">0</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa-solid fa-file-circle-exclamation fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Inactive</div>
+                            <div id="inactive" class="h5 mb-0 font-weight-bold text-gray-800">0</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa-solid fa-file-circle-xmark fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="card shadow mb-4">
         <div class="card-header">{{ __('Console') }}</div>
         <div class="card-body">
@@ -135,6 +201,20 @@
         $('input[type=search]').css({
             'height': 'auto'
         });
+        console.log(table.getData())
+    });
+    table.on("dataLoaded", function(data) {
+        counter = {}
+        if (data.length > 0) {
+            data.forEach(function(obj) {
+                var key = JSON.stringify(obj.status.toLowerCase())
+                counter[key] = (counter[key] || 0) + 1
+            })
+        }
+        $('#active').html(counter['"active"'])
+        $('#expired').html(counter['"expired"'])
+        $('#inactive').html(counter['"inactive"'])
+        $('#inrenewal').html(counter['"in renewal"'])
     });
 </script>
 @endsection

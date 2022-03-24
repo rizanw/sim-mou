@@ -3,6 +3,7 @@
 use App\Http\Controllers\App\Contact;
 use App\Http\Controllers\App\Continent;
 use App\Http\Controllers\App\Country;
+use App\Http\Controllers\App\Dashboard;
 use App\Http\Controllers\App\Document;
 use App\Http\Controllers\App\DocumentType;
 use App\Http\Controllers\App\InstitutionType;
@@ -29,13 +30,18 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
 Route::prefix('app')->middleware(['auth'])->group(function () {
     Route::get('/', function () {
         return redirect('/app/dashboard');
     });
-    Route::get('/dashboard', [\App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
+
+    // Dashboard routes
+    Route::prefix('dashboard')->group(function () {
+        Route::get('/', [Dashboard::class, 'index'])->name('dashboard');
+
+        // stats
+        Route::get('/count-document-by-type/$id', [Dashboard::class, 'countDocumentByType'])->name('stats.countDocumentByType');
+    });
 
     // Document routes
     Route::get('/documents', [Document::class, 'index'])->name('documents');
@@ -45,7 +51,7 @@ Route::prefix('app')->middleware(['auth'])->group(function () {
         });
         Route::get('/data', [Document::class, 'data'])->name('document.data');
         Route::post('/delete', [Document::class, 'delete'])->name('document.delete');
-        
+
         Route::get('/create', [Document::class, 'createView'])->name('document.create');
         Route::post('/store', [Document::class, 'store'])->name('document.store');
 

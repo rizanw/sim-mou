@@ -1,14 +1,14 @@
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{route('home')}}">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{route('dashboard')}}">
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fa-solid fa-handshake"></i>
         </div>
         <div class="sidebar-brand-text mx-3">{{ config('app.name', 'SIM MoU') }}</div>
     </a>
     <hr class="sidebar-divider my-0">
-    <li class="nav-item {{ request()->is('home') ? 'active' : '' }}">
-        <a class="nav-link" href="{{route('home')}}">
+    <li class="nav-item {{ request()->is('app/dashboard*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{route('dashboard')}}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span>
         </a>
@@ -87,8 +87,8 @@
         <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">User : {{Auth::user()->name}}:</h6>
-                <a class="collapse-item" href="{{route('home')}}">Edit Profile</a>
-                <a class="collapse-item" href="{{route('home')}}">Change Password</a>
+                <a class="collapse-item" href="{{route('dashboard')}}">Edit Profile</a>
+                <a class="collapse-item" href="{{route('dashboard')}}">Change Password</a>
             </div>
         </div>
     </li>
@@ -110,8 +110,8 @@
         <div id="collapseUAM" class="collapse" aria-labelledby="headingUAM" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Logs:</h6>
-                <!-- <a class="collapse-item" href="{{route('home')}}">Logged Activities</a>
-                <a class="collapse-item" href="{{route('home')}}">Logged Log-in</a> -->
+                <!-- <a class="collapse-item" href="{{route('dashboard')}}">Logged Activities</a>
+                <a class="collapse-item" href="{{route('dashboard')}}">Logged Log-in</a> -->
             </div>
         </div>
     </li>
