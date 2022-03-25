@@ -4,11 +4,11 @@
 @section('content')
 <nav class="nav nav-borders">
     <a class="nav-link active ms-0" href="{{route('internal.institution')}}">Institution</a>
-    <a class="nav-link" href="account-billing.html">Units</a>
+    <a class="nav-link" href="{{route('internal.units')}}">Units</a>
 </nav>
 <hr class="mt-0 mb-4">
 <div>
-    <div class="card mb-4">
+    <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
             <h6 class="m-0 font-weight-bold text-primary">Institution</h6>
             <div class="dropdown no-arrow">
@@ -111,4 +111,5 @@
             </form>
         </div>
     </div>
-    @endsection
+</div>
+@endsection

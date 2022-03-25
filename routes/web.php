@@ -8,6 +8,7 @@ use App\Http\Controllers\App\Document;
 use App\Http\Controllers\App\DocumentType;
 use App\Http\Controllers\App\InstitutionType;
 use App\Http\Controllers\App\Internal;
+use App\Http\Controllers\App\InternalUnit;
 use App\Http\Controllers\App\Partner;
 use App\Http\Controllers\App\PartnerUnit;
 use App\Http\Controllers\App\Program;
@@ -123,10 +124,20 @@ Route::prefix('app')->middleware(['auth'])->group(function () {
         Route::get('/', function () {
             return redirect('/app/internal/institution');
         });
-        Route::get('/institution', [Internal::class, 'index'])->name('internal.institution');
-        
-        Route::get('/institution/edit', [Internal::class, 'editView'])->name('internal.institution.edit');
-        Route::post('/institution/update', [Internal::class, 'update'])->name('internal.institution.update');
+        Route::prefix('institution')->group(function () {
+            Route::get('/', [Internal::class, 'index'])->name('internal.institution');
+            Route::get('/edit', [Internal::class, 'editView'])->name('internal.institution.edit');
+            Route::post('/update', [Internal::class, 'update'])->name('internal.institution.update');
+        });
+
+        // internal units routes
+        Route::get('/units', [InternalUnit::class, 'index'])->name('internal.units');
+        Route::prefix('unit')->group(function () {
+            Route::get('/data', [InternalUnit::class, 'data'])->name('internal.unit.data');
+            Route::post('/store', [InternalUnit::class, 'store'])->name('internal.unit.store');
+            Route::post('/update', [InternalUnit::class, 'update'])->name('internal.unit.update');
+            Route::post('/delete', [InternalUnit::class, 'delete'])->name('internal.unit.delete');
+        });
     });
 
     // Area routes

@@ -48,6 +48,18 @@
     <div class="sidebar-heading">
         References
     </div>
+    <li class="nav-item {{ request()->is('app/internal/*') ? 'active' : '' }}">
+        <a class="nav-link {{ request()->is('app/internal/*') ? '' : 'collapsed' }}" href="#" data-bs-toggle="collapse" data-bs-target="#collapseInternal" aria-expanded="true" aria-controls="collapseInternal">
+        <i class="fa-solid fa-school"></i> <span>Internal</span>
+        </a>
+        <div id="collapseInternal" class="collapse {{ request()->is('app/internal/*') ? 'show' : '' }}" aria-labelledby="headingInternal" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Internal:</h6>
+                <a class="collapse-item {{ request()->is('app/internal/institution') ? 'active' : '' }}" href="{{ route('internal.institution') }}">Institution</a>
+                <a class="collapse-item {{ request()->is('app/internal/units') ? 'active' : '' }}" href="{{ route('internal.units') }}">Units</a>
+            </div>
+        </div>
+    </li>
     <li class="nav-item {{ request()->is('app/area/*') ? 'active' : '' }}">
         <a class="nav-link {{ request()->is('app/area/*') ? '' : 'collapsed' }}" href="#" data-bs-toggle="collapse" data-bs-target="#collapseArea" aria-expanded="true" aria-controls="collapseArea">
             <i class="fa-solid fa-map-location-dot"></i> <span>Area</span>

@@ -1,74 +1,13 @@
 @extends('layouts.app')
-
-@section('pagetitle', 'Institution Units')
+@section('pagetitle', 'Internal Units')
 
 @section('content')
+<nav class="nav nav-borders">
+    <a class="nav-link" href="{{route('internal.institution')}}">Institution</a>
+    <a class="nav-link active ms-0" href="{{route('internal.units')}}">Units</a>
+</nav>
+<hr class="mt-0 mb-4">
 <div>
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Institution</h6>
-        </div>
-        <div class="card-body">
-            <div class="row align-items-start">
-                <div class="col">
-                    <h6 class="m-0 font-weight-bold">Info</h6>
-                    <hr />
-                    <div class="row align-items-start mb-2">
-                        <div class="col">
-                            <p class="m-0 font-weight-bold"><i class="fa-solid fa-building-columns"></i> Name:</p>
-                        </div>
-                        <div class="col">
-                            <p class="m-0">{{$institution->name}}</p>
-                        </div>
-                    </div>
-                    <div class="row align-items-start mb-2">
-                        <div class="col">
-                            <p class="m-0 font-weight-bold"><i class="fa-solid fa-globe"></i> Continent / Country:</p>
-                        </div>
-                        <div class="col">
-                            <p class="m-0">{{$institution->country->continent->name}} / <b>{{$institution->country->name}}</b></p>
-                        </div>
-                    </div>
-                    <div class="row align-items-start">
-                        <div class="col">
-                            <p class="m-0 font-weight-bold"><i class="fa-solid fa-location-dot"></i> Address:</p>
-                        </div>
-                        <div class="col">
-                            <p class="m-0">{{$institution->address}} </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <h6 class="m-0 font-weight-bold">Contact</h6>
-                    <hr />
-                    <div class="row align-items-start mb-2">
-                        <div class="col">
-                            <p class="m-0 font-weight-bold"><i class="fa-brands fa-internet-explorer"></i> Website:</p>
-                        </div>
-                        <div class="col">
-                            <p class="m-0"> <a href="http://{{$institution->website}}" target="_blank" class="link-secondary">{{$institution->website}}</a> </p>
-                        </div>
-                    </div>
-                    <div class="row align-items-start mb-2">
-                        <div class="col">
-                            <p class="m-0 font-weight-bold"><i class="fa-solid fa-phone"></i> Telp:</p>
-                        </div>
-                        <div class="col">
-                            <p class="m-0"> {{$institution->telp}} </p>
-                        </div>
-                    </div>
-                    <div class="row align-items-start">
-                        <div class="col">
-                            <p class="m-0 font-weight-bold"><i class="fa-solid fa-at"></i> Email:</p>
-                        </div>
-                        <div class="col">
-                            <p class="m-0"> <a href="mailto:{{$institution->email}}" target="_blank" class="link-secondary">{{$institution->email}}</a> </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="card shadow mb-4">
         <div class="card-header">{{ __('Console') }}</div>
         <div class="card-body">
@@ -76,7 +15,7 @@
                 <span class="icon text-white-50">
                     <i class="fa-solid fa-plus"></i>
                 </span>
-                <span class="text">Add Institution Unit</span>
+                <span class="text">Add Unit</span>
             </button>
         </div>
     </div>
@@ -94,11 +33,11 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="unitModalTitle">Add Institute Unit</h5>
+                <h5 class="modal-title" id="unitModalTitle">Add Unit</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="unitForm" action="{{route('unit.store')}}" method="post">
+                <form id="unitForm" action="{{route('internal.unit.store')}}" method="post">
                     @method('post')
                     @csrf
                     <input id="id" name="id" type="hidden">
@@ -170,20 +109,6 @@
 
 @section('script')
 <script type="text/javascript">
-    $('#unitModal').on('hidden.bs.modal', function(e) {
-        $('#unitModalTitle').html('Add Institute Unit')
-        $('#unitForm').attr('action', "{{route('unit.store')}}");
-        $('input[name=id]').val('')
-        $('input[name=name]').val('')
-        $('input[name=label]').val('')
-        $('input[name=website]').val('')
-        $('input[name=telp]').val('')
-        $('input[name=email]').val('')
-        $('#parentSelect').selectpicker('deselectAll')
-        $('#parentSelect').find('option:disabled').removeAttr('disabled')
-        $('#parentSelect').selectpicker('refresh')
-    })
-
     var deleteIcon = function(cell, formatterParams) {
         return '<i style="color: #C82333" class="fa-solid fa-trash"></i>';
     };
@@ -216,8 +141,8 @@
                     width: 70,
                     hozAlign: "center",
                     cellClick: function(e, cell) {
-                        $('#unitModalTitle').html('Edit Institute Unit')
-                        $('#unitForm').attr('action', "{{route('unit.update')}}");
+                        $('#unitModalTitle').html('Edit Unit')
+                        $('#unitForm').attr('action', "{{route('internal.unit.update')}}");
                         $('input[name=id]').val(cell.getRow().getData().id)
                         $('input[name=name]').val(cell.getRow().getData().name)
                         $('input[name=label]').val(cell.getRow().getData().label)
@@ -227,7 +152,6 @@
                         $('#parentSelect').selectpicker('val', cell.getRow().getData().parent_id.toString())
                         $('#parentSelect').find('[value=' + cell.getRow().getData().id + ']').prop('disabled', true);
                         $('#parentSelect').selectpicker('refresh');
-
                         var unitModal = new bootstrap.Modal(document.getElementById('unitModal'), {})
                         unitModal.toggle()
                     }
@@ -240,7 +164,7 @@
                         var name = cell.getRow().getData().name
                         var id = cell.getRow().getData().id
                         $('#confirmBoxBody').html(`Are you sure to delete "${name}"?`)
-                        $('#confirmBoxForm').attr('action', "{{route('unit.delete')}}");
+                        $('#confirmBoxForm').attr('action', "{{route('internal.unit.delete')}}");
                         $('#confirmBoxForm').append(`<input id="unitId" name="id" type="hidden" value="${id}">`)
                         var confirmBox = new bootstrap.Modal(document.getElementById('confirmBox'), {})
                         confirmBox.toggle()
@@ -250,7 +174,7 @@
         ]
     });
     table.on("tableBuilt", function() {
-        table.setData("{{route('unit.data', $id)}}");
+        table.setData("{{route('internal.unit.data')}}");
         $('input[type=search]').attr("placeholder", "search..");
         $('input[type=search]').addClass('form-control');
         $('input[type=search]').css({
