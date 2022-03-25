@@ -7,6 +7,7 @@ use App\Http\Controllers\App\Dashboard;
 use App\Http\Controllers\App\Document;
 use App\Http\Controllers\App\DocumentType;
 use App\Http\Controllers\App\InstitutionType;
+use App\Http\Controllers\App\Internal;
 use App\Http\Controllers\App\Partner;
 use App\Http\Controllers\App\PartnerUnit;
 use App\Http\Controllers\App\Program;
@@ -115,6 +116,17 @@ Route::prefix('app')->middleware(['auth'])->group(function () {
         Route::post('/store', [Program::class, 'store'])->name('program.store');
         Route::post('/update', [Program::class, 'update'])->name('program.update');
         Route::post('/delete', [Program::class, 'delete'])->name('program.delete');
+    });
+
+    // Internal Institution routes
+    Route::prefix('internal')->group(function () {
+        Route::get('/', function () {
+            return redirect('/app/internal/institution');
+        });
+        Route::get('/institution', [Internal::class, 'index'])->name('internal.institution');
+        
+        Route::get('/institution/edit', [Internal::class, 'editView'])->name('internal.institution.edit');
+        Route::post('/institution/update', [Internal::class, 'update'])->name('internal.institution.update');
     });
 
     // Area routes
