@@ -28,14 +28,21 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('landingpage');
 
 Auth::routes();
+
+Route::get('/redirection', function(){
+    if (Auth::check()) {
+        return redirect()->route('app');
+    }
+    return redirect()->route('landingpage');
+})->name('404.redirection');
 
 Route::prefix('app')->middleware(['auth'])->group(function () {
     Route::get('/', function () {
         return redirect('/app/dashboard');
-    });
+    })->name('app');
 
     // Dashboard routes
     Route::prefix('dashboard')->group(function () {
