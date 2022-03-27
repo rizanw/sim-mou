@@ -12,6 +12,8 @@ use App\Http\Controllers\App\InternalUnit;
 use App\Http\Controllers\App\Partner;
 use App\Http\Controllers\App\PartnerUnit;
 use App\Http\Controllers\App\Program;
+use App\Http\Controllers\Chart\DocumentChart;
+use App\Http\Controllers\Chart\PartnerChart;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -38,6 +40,21 @@ Route::get('/redirection', function () {
     }
     return redirect()->route('landingpage');
 })->name('404.redirection');
+
+// Chart data
+Route::prefix('chart')->group(function () {
+    // document chart data
+    Route::prefix('document')->group(function () {
+        Route::get('/continent', [DocumentChart::class, 'byContinent'])->name('chart.document.byContinent');
+    });
+
+    // partner chart data
+    Route::prefix('partner')->group(function () {
+        Route::get('/continent', [PartnerChart::class, 'byContinent'])->name('chart.partner.byContinent');
+        Route::get('/country', [PartnerChart::class, 'byCountry'])->name('chart.partner.byCountry');
+    });
+});
+
 
 Route::prefix('app')->middleware(['auth'])->group(function () {
     Route::get('/', function () {

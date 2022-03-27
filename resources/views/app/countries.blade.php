@@ -87,6 +87,9 @@
     var editIcon = function(cell, formatterParams) {
         return '<i style="color: #4E7AE4" class="far fa-edit"></i>';
     };
+    var flag = function(cell, formatterParams) {
+        return `<span class="fi fi-${cell.getRow().getData().id.toLowerCase()}"></span>`;
+    };
     var table = new Tabulator("#country-table", {
         placeholder: "No data",
         layout: "fitColumns",
@@ -100,7 +103,14 @@
             {
                 title: "Code (ISO 3166-1 alpha-2)",
                 field: "id",
+                hozAlign: "center",
                 headerFilter: true
+            },
+            {
+                title: "Flag",
+                formatter: flag,
+                hozAlign: "center",
+                width: 60
             },
             {
                 title: "Name",
@@ -110,6 +120,7 @@
             {
                 title: "Continent code",
                 field: "continent.id",
+                hozAlign: "center",
                 headerFilter: true
             },
             {
