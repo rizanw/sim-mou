@@ -4,7 +4,7 @@
 
 @section('content')
 <form id="documentForm" action="{{$url}}" method="post" enctype="multipart/form-data">
-    @if ($viewType != 'edit')
+    @if ($viewType == 'detail')
     <div class="card shadow mb-4">
         <div class="card-header">{{ __('Console') }}</div>
         <div class="card-body">
@@ -70,6 +70,12 @@
                         <span class="input-group-text">
                             <i class="fa-solid fa-calendar"></i>
                         </span>
+                    </div>
+                    <div class="form-text form-check">
+                        <input name="unspecifiedEndDate" class="form-check-input" type="checkbox" value="true" id="unspecifiedEndDate" {{isset($document)&&$document->end_date=='unspecified'?'checked':''}} {{isset($isReadonly)?'disabled':''}}>
+                        <label class="form-check-label" for="unspecifiedEndDate">
+                            Unspecified End Date
+                        </label>
                     </div>
                 </div>
             </div>
@@ -264,6 +270,21 @@
 
 @section('script')
 <script type="text/javascript">
+    if ($('input#unspecifiedEndDate').is(':checked')) {
+        $('input#enddate').attr('disabled', true)
+        $('input#enddate').attr('required', false)
+    }
+    $('input#unspecifiedEndDate').change(function() {
+        if (this.checked) {
+            $('input#enddate').attr('disabled', true)
+            $('input#enddate').attr('required', false)
+            $('input#enddate').val('unspecified');
+        } else {
+            $('input#enddate').attr('disabled', false)
+            $('input#enddate').attr('required', true)
+            $('input#enddate').val('');
+        }
+    });
     $('.date input').datepicker({});
     var capitalize = (str) => {
         return str.charAt(0).toUpperCase() + str.slice(1);

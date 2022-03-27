@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Document;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class DeactiveDocument extends Command
@@ -33,8 +35,10 @@ class DeactiveDocument extends Command
         $curDate = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
 
         foreach ($documents as $key => $document) {
+            if ($document->end_date == '0001-01-01') continue;
+
             $endDate = Carbon::parse($document->end_date)->format('Y-m-d');
-            if ($endDate <= $curDate) {
+            if ($endDate <= $curDate && $document->status == "Active") {
                 $data = Document::where('id', $document->id)->first();
                 $data->status = "Expired";
                 $data->save();

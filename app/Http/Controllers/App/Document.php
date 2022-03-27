@@ -20,6 +20,7 @@ class Document extends Controller
     public $documentStatusInactive = "Inactive";
     public $documentStatusInRenewal = "In Renewal";
     public $documentStatusExpired = "Expired";
+    public $endDateUnspecified = "0001-01-01";
     private $folder = "documents";
 
     /**
@@ -49,7 +50,7 @@ class Document extends Controller
      */
     public function data()
     {
-        $documents = ModelsDocument::all();
+        $documents = ModelsDocument::orderBy('start_date', 'DESC')->get();
         $data = array();
         foreach ($documents as $document) {
             $partners = array();
@@ -70,8 +71,7 @@ class Document extends Controller
                 'partners' => $partners,
                 'desc' => $document->desc,
                 'startDate' => $document->start_date,
-                'endDate' => $document->end_date,
-
+                'endDate' => $document->end_date == $this->endDateUnspecified ? 'unspecified' : $document->end_date,
             );
         }
 
@@ -119,6 +119,7 @@ class Document extends Controller
         $url = \route('document.store');
         $pageTitle = 'Create Document';
         $isRenew = $request->query('renew');
+        $oldDocument = null;
         if ($isRenew) {
             $oldDocument = ModelsDocument::where('id', $isRenew)->first();
             $pageTitle = 'Renew Document: ' . $oldDocument->number;
@@ -128,6 +129,7 @@ class Document extends Controller
         return view('app.document.editor')
             ->with('pageTitle', $pageTitle)
             ->with('url', $url)
+            ->with('id', 0)
             ->with('viewType', $viewType)
             ->with('isRenew', $isRenew)
             ->with('oldDocument', $oldDocument)
@@ -150,10 +152,14 @@ class Document extends Controller
             'status' => 'required',
             'document-type' => 'required',
             'startdate' => 'required',
-            'enddate' => 'required',
             'number' => 'required',
             'title' => 'required',
         ]);
+
+        $endDate = $request['enddate'];
+        if ($request['unspecifiedEndDate']) {
+            $endDate = $this->endDateUnspecified;
+        }
 
         try {
             $name = preg_replace("/[^a-zA-Z0-9]+/", "", $request['number']) . "_" . time() . ".pdf";
@@ -162,7 +168,7 @@ class Document extends Controller
             $data = new ModelsDocument();
             $data->status = $request['status'];
             $data->start_date = $request['startdate'];
-            $data->end_date = $request['enddate'];
+            $data->end_date = $endDate;
             $data->document_type_id = $request['document-type'];
             $data->number = $request['number'];
             $data->title = $request['title'];
@@ -215,8 +221,13 @@ class Document extends Controller
         $document = ModelsDocument::where('id', $id)->first();
         $startdate = explode("-", $document->start_date);
         $document->start_date = $startdate[1] . "/" . $startdate[2] . "/" . $startdate[0];
-        $enddate = explode("-", $document->end_date);
-        $document->end_date = $enddate[1] . "/" . $enddate[2] . "/" . $enddate[0];
+        $enddate = '';
+        if ($document->end_date == $this->endDateUnspecified) {
+            $document->end_date = 'unspecified';
+        } else {
+            $enddate = explode("-", $document->end_date);
+            $document->end_date = $enddate[1] . "/" . $enddate[2] . "/" . $enddate[0];
+        }
 
         $docPrograms = array();
         foreach ($document->programs as $val) {
@@ -332,8 +343,13 @@ class Document extends Controller
         $document = ModelsDocument::where('id', $id)->first();
         $startdate = explode("-", $document->start_date);
         $document->start_date = $startdate[1] . "/" . $startdate[2] . "/" . $startdate[0];
-        $enddate = explode("-", $document->end_date);
-        $document->end_date = $enddate[1] . "/" . $enddate[2] . "/" . $enddate[0];
+        $enddate = '';
+        if ($document->end_date == $this->endDateUnspecified) {
+            $document->end_date = 'unspecified';
+        } else {
+            $enddate = explode("-", $document->end_date);
+            $document->end_date = $enddate[1] . "/" . $enddate[2] . "/" . $enddate[0];
+        }
 
         $docPrograms = array();
         foreach ($document->programs as $val) {
@@ -440,7 +456,7 @@ class Document extends Controller
                 'partners' => $partners,
                 'desc' => $document->desc,
                 'startDate' => $document->start_date,
-                'endDate' => $document->end_date,
+                'endDate' => $document->end_date == $this->endDateUnspecified ? 'unspecified' : $document->end_date,
                 '_children' => $this->getTree($document->childs)
             );
         }
