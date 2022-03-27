@@ -36,7 +36,7 @@ class DeactiveDocument extends Command
             $endDate = Carbon::parse($document->end_date)->format('Y-m-d');
             if ($endDate <= $curDate) {
                 $data = Document::where('id', $document->id)->first();
-                $data->status = "Inactive";
+                $data->status = "Expired";
                 $data->save();
                 $this->info('Deactivate Document: ' . $document->number);
             }

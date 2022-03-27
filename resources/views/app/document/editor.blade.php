@@ -4,9 +4,33 @@
 
 @section('content')
 <form id="documentForm" action="{{$url}}" method="post" enctype="multipart/form-data">
+    @if ($viewType != 'edit')
+    <div class="card shadow mb-4">
+        <div class="card-header">{{ __('Console') }}</div>
+        <div class="card-body">
+            <div>
+                <a href="{{route('document.edit', $id)}}" class="btn btn-primary btn-icon-split m-2">
+                    <span class="icon text-white-50">
+                        <i class="far fa-edit"></i>
+                    </span>
+                    <span class="text">Edit Document</span>
+                </a>
+                @if (isset($isRenewable) && $isRenewable)
+                <a href="{{route('document.create', ['renew' => $id])}}" class="btn btn-success btn-icon-split m-2">
+                    <span class="icon text-white-50">
+                        <i class="fa-solid fa-arrow-rotate-left"></i>
+                    </span>
+                    <span class="text">Renew Document</span>
+                </a>
+                @endif
+            </div>
+        </div>
+    </div>
+    @endif
     @method('post')
     @csrf
     <input id="id" name="id" value="{{isset($document)?$document->id:''}}" type="hidden">
+    <input id="renew" name="renew" value="{{isset($oldDocument)?$oldDocument->id:''}}" type="hidden">
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">{{ __('Validity Period') }}</h6>
@@ -207,7 +231,7 @@
             @endif
             @if (!isset($isReadonly))
             <div class="form-group row mb-4">
-                <label class="col-sm-2 col-form-label">{{(isset($document)?'Replace Document':'Upload<b class="required">*</b>')}}:</label>
+                <label class="col-sm-2 col-form-label">{!!(isset($document)?'Replace Document':'Upload<b class="required">*</b>')!!}:</label>
                 <div class="col-sm-10">
                     <input name="document" type="file" class="form-control" aria-label="file" accept="application/pdf" {{(isset($document)?'':'required')}}>
                 </div>
@@ -277,7 +301,7 @@
     });
     @if(isset($isReadonly))
     var showIcon = function(cell, formatterParams) {
-        return '<i style="color: #4E7AE4" class="fa-solid fa-eye"></i>';
+        return '<i class="fa-solid fa-eye text-info"></i>';
     };
     var table = new Tabulator("#document-table", {
         placeholder: "No data",

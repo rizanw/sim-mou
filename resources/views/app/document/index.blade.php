@@ -6,7 +6,7 @@
 <div>
     <div class="row">
         <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card border-left-primary shadow h-100 py-2" onclick="filterStatus('Active')" style="cursor: pointer;">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
@@ -22,7 +22,7 @@
         </div>
 
         <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-info shadow h-100 py-2">
+            <div class="card border-left-info shadow h-100 py-2" onclick="filterStatus('In Renewal')" style="cursor: pointer;">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
@@ -38,7 +38,7 @@
         </div>
 
         <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card border-left-warning shadow h-100 py-2" onclick="filterStatus('Expired')" style="cursor: pointer;">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
@@ -54,7 +54,7 @@
         </div>
 
         <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-danger shadow h-100 py-2">
+            <div class="card border-left-danger shadow h-100 py-2" onclick="filterStatus('Inactive')" style="cursor: pointer;">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
@@ -82,8 +82,11 @@
         </div>
     </div>
     <div class="card shadow mb-4">
-        <div class="card-header py-3">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
             <h6 class="m-0 font-weight-bold text-primary">{{ __('Table') }}</h6>
+            <div style="cursor:pointer;" onclick="refreshTable()" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Refresh Table">
+                <i class="fa-solid fa-arrow-rotate-left text-success"></i>
+            </div>
         </div>
         <div class="card-body">
             <div id="document-table"></div>
@@ -95,13 +98,13 @@
 @section('script')
 <script type="text/javascript">
     var deleteIcon = function(cell, formatterParams) {
-        return '<i style="color: #C82333" class="fa-solid fa-trash"></i>';
+        return '<i class="fa-solid fa-trash text-danger"></i>';
     };
     var editIcon = function(cell, formatterParams) {
-        return '<i style="color: #4E7AE4" class="far fa-edit"></i>';
+        return '<i class="far fa-edit text-primary"></i>';
     };
     var showIcon = function(cell, formatterParams) {
-        return '<i style="color: #4E7AE4" class="fa-solid fa-eye"></i>';
+        return '<i class="fa-solid fa-eye text-info"></i>';
     };
     var table = new Tabulator("#document-table", {
         placeholder: "No data",
@@ -215,5 +218,11 @@
         $('#inactive').html(counter['"inactive"'])
         $('#inrenewal').html(counter['"in renewal"'])
     });
+    var filterStatus = (status) => {
+        table.setFilter("status", "=", status);
+    }
+    var refreshTable = () => {
+        table.clearFilter();
+    }
 </script>
 @endsection

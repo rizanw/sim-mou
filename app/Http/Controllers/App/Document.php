@@ -104,7 +104,7 @@ class Document extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function createView()
+    public function createView(Request $request)
     {
         $statuses = array(
             $this->documentStatusActive,
@@ -117,10 +117,20 @@ class Document extends Controller
         $institutions = Institution::where('parent_id', null)->get();
         $partners = Institution::where([['is_partner', true], ['parent_id', null]])->get();
         $url = \route('document.store');
+        $pageTitle = 'Create Document';
+        $isRenew = $request->query('renew');
+        if ($isRenew) {
+            $oldDocument = ModelsDocument::where('id', $isRenew)->first();
+            $pageTitle = 'Renew Document: ' . $oldDocument->number;
+        }
+        $viewType = 'create';
 
         return view('app.document.editor')
-            ->with('pageTitle', 'Create Document')
+            ->with('pageTitle', $pageTitle)
             ->with('url', $url)
+            ->with('viewType', $viewType)
+            ->with('isRenew', $isRenew)
+            ->with('oldDocument', $oldDocument)
             ->with('institutions', $institutions)
             ->with('partners', $partners)
             ->with('programs', $programs)
@@ -143,7 +153,6 @@ class Document extends Controller
             'enddate' => 'required',
             'number' => 'required',
             'title' => 'required',
-            'file' => 'required',
         ]);
 
         try {
@@ -168,12 +177,19 @@ class Document extends Controller
                     $data->institutions()->attach($request['units'][$key], ['party' => $key]);
                 }
             }
+
+            if ($request['renew']) {
+                $oldDocument = ModelsDocument::find($request['renew']);
+                $oldDocument->parent_id = $data->id;
+                $oldDocument->status = $this->documentStatusInactive;
+                $oldDocument->save();
+            }
         } catch (Exception $exception) {
             $errorcode = $exception->getMessage();
             return redirect()->back()->with('error', "Failed: " . $errorcode);
         }
 
-        return redirect()->back()->with('success', "Succeed: Document added!");
+        return redirect()->route('documents')->with('success', "Succeed: New Document added!");
     }
 
 
@@ -217,10 +233,12 @@ class Document extends Controller
                 $docInstituions[] = array($val->pivot->party => $val->id);
             }
         }
+        $viewType = 'edit';
 
         return view('app.document.editor')
             ->with('pageTitle', 'Edit Document')
             ->with('url', $url)
+            ->with('viewType', $viewType)
             ->with('document', $document)
             ->with('docPrograms', $docPrograms)
             ->with('docUnits', $docUnits)
@@ -333,15 +351,23 @@ class Document extends Controller
             }
         }
 
-        $isReadonly = true;
+        $viewType = 'detail';
+        $isReadonly = 'detail';
         $predecessors = ModelsDocument::where('id', $id)->with('childs')->get();
         $countTree = $this->countTree($predecessors[0]->childs, 0);
+        $isRenewable = false;
+
+        if ($document->status == $this->documentStatusInRenewal) {
+            $isRenewable = true;
+        }
 
         return view('app.document.editor')
             ->with('pageTitle', 'Document ' . $document->number)
             ->with('id', $id)
             ->with('url', $url)
+            ->with('viewType', $viewType)
             ->with('isReadonly', $isReadonly)
+            ->with('isRenewable', $isRenewable)
             ->with('document', $document)
             ->with('countTree', $countTree)
             ->with('docPrograms', $docPrograms)
@@ -424,7 +450,7 @@ class Document extends Controller
     private function countTree($arr, $counter)
     {
         foreach ($arr as $document) {
-            if($document->childs){
+            if ($document->childs) {
                 return $this->countTree($document->childs, $counter + 1);
             }
         }
