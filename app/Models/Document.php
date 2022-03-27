@@ -34,4 +34,23 @@ class Document extends Model
     {
         return $this->belongsToMany(Institution::class, 'documents_institutions', 'document_id', 'institution_id')->withPivot('party');;
     }
+
+    /**
+     * Get one level of child the Document.
+     * note: child means predecessor, the document without parent_id means the newest
+     */
+    public function child()
+    {
+        return $this->hasMany(Document::class, 'parent_id');
+    }
+
+    /**
+     * Get childs of the Institution.
+     * recursive relationship
+     * note: child means predecessor, the document without parent_id means the newest
+     */
+    public function childs()
+    {
+        return $this->hasMany(Document::class, 'parent_id')->with('child');
+    }
 }

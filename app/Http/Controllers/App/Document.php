@@ -11,6 +11,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class Document extends Controller
 {
@@ -333,12 +334,16 @@ class Document extends Controller
         }
 
         $isReadonly = true;
+        $predecessors = ModelsDocument::where('id', $id)->with('childs')->get();
+        $countTree = $this->countTree($predecessors[0]->childs, 0);
 
         return view('app.document.editor')
             ->with('pageTitle', 'Document ' . $document->number)
+            ->with('id', $id)
             ->with('url', $url)
             ->with('isReadonly', $isReadonly)
             ->with('document', $document)
+            ->with('countTree', $countTree)
             ->with('docPrograms', $docPrograms)
             ->with('docUnits', $docUnits)
             ->with('docInstituions', $docInstituions)
@@ -367,5 +372,62 @@ class Document extends Controller
         }
 
         return $response;
+    }
+
+    /**
+     * Create json data for the application Predecessor Document dashboard.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function predecessorData($id)
+    {
+        $documents = ModelsDocument::where('id', $id)->with('childs')->get();
+        $data = $this->getTree($documents[0]->childs);
+
+        return response()->json($data);
+    }
+
+    /**
+     * Create tree data for the application PartnerUnit dashboard.
+     *
+     * @return Array
+     */
+    private function getTree($arr)
+    {
+        $data = array();
+        foreach ($arr as $document) {
+            $partners = array();
+            if (isset($document->institutions)) {
+                foreach ($document->institutions as $key => $value) {
+                    if ($value->is_partner && !isset($value->parent_id)) {
+                        array_push($partners, $value->name);
+                    }
+                }
+            }
+
+            $data[] = array(
+                'id' => $document->id,
+                'title' => $document->title,
+                'number' => $document->number,
+                'status' => $document->status,
+                'type' => $document->documentType,
+                'partners' => $partners,
+                'desc' => $document->desc,
+                'startDate' => $document->start_date,
+                'endDate' => $document->end_date,
+                '_children' => $this->getTree($document->childs)
+            );
+        }
+        return $data;
+    }
+
+    private function countTree($arr, $counter)
+    {
+        foreach ($arr as $document) {
+            if($document->childs){
+                return $this->countTree($document->childs, $counter + 1);
+            }
+        }
+        return $counter;
     }
 }

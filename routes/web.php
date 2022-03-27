@@ -32,7 +32,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/redirection', function(){
+Route::get('/redirection', function () {
     if (Auth::check()) {
         return redirect()->route('app');
     }
@@ -69,6 +69,7 @@ Route::prefix('app')->middleware(['auth'])->group(function () {
 
         Route::get('/{id}', [Document::class, 'detailView'])->name('document.detail');
         Route::get('/{id}/download', [Document::class, 'download'])->name('document.download');
+        Route::get('/{id}/predecessors', [Document::class, 'predecessorData'])->name('document.predecessor.data');
     });
 
     // Partner routes

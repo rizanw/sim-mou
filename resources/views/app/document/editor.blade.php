@@ -215,16 +215,26 @@
             @endif
         </div>
     </div>
+    @if (!isset($isReadonly))
     <div class="card shadow mb-4">
         <div class="card-body">
             <div style="float: right;">
                 <a href="{{route('documents')}}" class="btn btn-secondary">Cancel/Back</a>
-                @if (!isset($isReadonly))
                 <button type="submit" class="btn btn-primary">Save changes</button>
-                @endif
             </div>
         </div>
     </div>
+    @else
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">{{ __('Predecessor Document(s)') }}</h6>
+            <h6 id="renewed-count" class="m-0 font-weight-regular">Renewed {{ $countTree }} time(s)</h6>
+        </div>
+        <div class="card-body">
+            <div id="document-table"></div>
+        </div>
+    </div>
+    @endif
 </form>
 @endsection
 
@@ -265,6 +275,85 @@
             }
         });
     });
+    @if(isset($isReadonly))
+    var showIcon = function(cell, formatterParams) {
+        return '<i style="color: #4E7AE4" class="fa-solid fa-eye"></i>';
+    };
+    var table = new Tabulator("#document-table", {
+        placeholder: "No data",
+        layout: "fitColumns",
+        dataTree: true,
+        dataTreeStartExpanded: true,
+        columns: [{
+                field: "id",
+                visible: false,
+            },
+            {
+                title: "Number",
+                field: "number",
+                headerFilter: true
+            },
+            {
+                title: "Type",
+                field: "type.shortname",
+                headerFilter: true,
+                width: 75
+            },
+            {
+                title: "Title",
+                field: "title",
+                headerFilter: true
+            },
+            {
+                title: "Partner(s)",
+                field: "partners",
+                headerFilter: true
+            },
+            {
+                title: "Status",
+                field: "status",
+                headerFilter: true,
+                width: 95
+            },
+            {
+                title: "Validity Period",
+                columns: [{
+                    title: "Start Date",
+                    field: "startDate",
+                    headerFilter: true,
+                    width: 110
+                }, {
+                    title: "End Date",
+                    field: "endDate",
+                    headerFilter: true,
+                    width: 110
+                }]
+            },
+            {
+                title: "Action",
+                columns: [{
+                    title: "show",
+                    formatter: showIcon,
+                    width: 70,
+                    hozAlign: "center",
+                    cellClick: function(e, cell) {
+                        var url = '{{ route("document.detail", ":id") }}';
+                        url = url.replace(':id', cell.getRow().getData().id.toString());
+                        location.href = url
+                    }
+                }]
+            },
+        ]
+    });
+    table.on("tableBuilt", function() {
+        table.setData("{{route('document.predecessor.data', $id)}}");
+        $('input[type=search]').attr("placeholder", "search..");
+        $('input[type=search]').addClass('form-control');
+        $('input[type=search]').css({
+            'height': 'auto'
+        });
+    });
+    @endif
     @if(isset($docInstituions))
     $(document).ready(function(e) {
         var units = @json($docUnits);

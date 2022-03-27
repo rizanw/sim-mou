@@ -201,7 +201,6 @@
         $('input[type=search]').css({
             'height': 'auto'
         });
-        console.log(table.getData())
     });
     table.on("dataLoaded", function(data) {
         counter = {}
