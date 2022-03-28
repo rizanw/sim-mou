@@ -36,7 +36,7 @@ class ExpireDocument extends Command
 
         $documents = Document::all();
         $curDate = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
-        $data = array();
+        $exp = array();
 
         foreach ($documents as $key => $document) {
             if ($document->end_date == '0001-01-01') continue;
@@ -46,13 +46,13 @@ class ExpireDocument extends Command
                 $data = Document::where('id', $document->id)->first();
                 $data->status = "Expired";
                 $data->save();
-
+                
                 $this->info('Deactivate Expire Document: ' . $document->number);
-                array_push($data, $document);
+                array_push($exp, $document);
             }
         }
 
-        if (count($data) > 0) {
+        if (count($exp) > 0) {
             $users = User::select('email')->get();
             Mail::to($users)->send(new ExpireDocumentMail($data));
         }

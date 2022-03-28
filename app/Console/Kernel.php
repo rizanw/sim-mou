@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->command('document:expire')->daily();
+        $schedule->command('document:willExpire')->daily();
     }
 
     /**
