@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\App;
 
 use App\Http\Controllers\Controller;
+use App\Mail\RegisterUserMail;
 use App\Models\User as ModelsUser;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class User extends Controller
 {
@@ -91,6 +93,13 @@ class User extends Controller
             $data->email = $request['email'];
             $data->password = Hash::make($request['password']);
             $data->save();
+
+            $user = [
+                'name' => $request['name'],
+                'email' => $request['email'],
+                'pwd' => $request['password']
+            ];
+            Mail::to($data->email)->send(new RegisterUserMail($user));
         } catch (Exception $exception) {
             $errorcode = $exception->getMessage();
             return redirect()->back()->with('error', "Failed: " . $errorcode);

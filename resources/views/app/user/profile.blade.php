@@ -65,6 +65,7 @@
     @endif
 </form>
 
+@isset($user)
 <div class="modal fade" id="changePasswrodModal" tabindex="-1" aria-labelledby="changePasswrodModal" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -105,6 +106,7 @@
         </div>
     </div>
 </div>
+@endisset
 @endsection
 
 @section('script')
