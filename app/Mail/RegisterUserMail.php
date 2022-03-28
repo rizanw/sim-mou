@@ -31,6 +31,7 @@ class RegisterUserMail extends Mailable
     public function build()
     {
         return $this->subject('Wellcome to ' . config('app.name'))
-            ->view('emails.register');
+            ->markdown('emails.registerUser')
+            ->with('user', $this->user);
     }
 }
