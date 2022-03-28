@@ -12,6 +12,7 @@ use App\Http\Controllers\App\InternalUnit;
 use App\Http\Controllers\App\Partner;
 use App\Http\Controllers\App\PartnerUnit;
 use App\Http\Controllers\App\Program;
+use App\Http\Controllers\App\User;
 use App\Http\Controllers\Chart\DocumentChart;
 use App\Http\Controllers\Chart\PartnerChart;
 use Illuminate\Support\Facades\Auth;
@@ -236,6 +237,27 @@ Route::prefix('app')->middleware(['auth'])->group(function () {
                 Route::post('/update', [DocumentType::class, 'update'])->name('documentType.update');
                 Route::post('/delete', [DocumentType::class, 'delete'])->name('documentType.delete');
             });
+        });
+    });
+
+    // control routes
+    Route::prefix('control')->group(function () {
+        // user control
+        Route::get('users', [User::class, 'index'])->name('users');
+        Route::prefix('user')->group(function () {
+            Route::get('/', function () {
+                return redirect()->route('users');
+            })->name('user');
+            Route::get('/data', [User::class, 'data'])->name('user.data');
+
+            Route::get('/create', [User::class, 'create'])->name('user.create');
+            Route::post('/store', [User::class, 'store'])->name('user.store');
+
+            Route::get('/{id}', [User::class, 'show'])->name('user.show');
+
+            Route::get('/{id}/edit', [User::class, 'edit'])->name('user.edit');
+            Route::post('/{id}/update', [User::class, 'update'])->name('user.update');
+            Route::post('/{id}/update-password', [User::class, 'updatePassword'])->name('user.update.password');
         });
     });
 });

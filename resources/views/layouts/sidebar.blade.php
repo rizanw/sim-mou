@@ -1,5 +1,4 @@
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-    <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{route('dashboard')}}">
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fa-solid fa-handshake"></i>
@@ -44,13 +43,12 @@
         </a>
     </li>
     <hr class="sidebar-divider">
-    <!-- Heading -->
     <div class="sidebar-heading">
         References
     </div>
     <li class="nav-item {{ request()->is('app/internal/*') ? 'active' : '' }}">
         <a class="nav-link {{ request()->is('app/internal/*') ? '' : 'collapsed' }}" href="#" data-bs-toggle="collapse" data-bs-target="#collapseInternal" aria-expanded="true" aria-controls="collapseInternal">
-        <i class="fa-solid fa-school"></i> <span>Internal</span>
+            <i class="fa-solid fa-school"></i> <span>Internal</span>
         </a>
         <div id="collapseInternal" class="collapse {{ request()->is('app/internal/*') ? 'show' : '' }}" aria-labelledby="headingInternal" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
@@ -85,35 +83,14 @@
             </div>
         </div>
     </li>
-    <!-- Divider -->
     <hr class="sidebar-divider">
-    <!-- Heading -->
     <div class="sidebar-heading">
-        Settings
+        Control Center
     </div>
-    <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item">
-        <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
-            <i class="fas fa-users-cog"></i> <span>User</span>
+    <li class="nav-item {{ request()->is('app/control/user') ? 'active' : '' }}">
+        <a class="nav-link" href="{{route('users')}}">
+            <i class="fa-solid fa-users"></i> <span>Users</span>
         </a>
-        <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">User : {{Auth::user()->name}}:</h6>
-                <a class="collapse-item" href="{{route('dashboard')}}">Edit Profile</a>
-                <a class="collapse-item" href="{{route('dashboard')}}">Change Password</a>
-            </div>
-        </div>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseUserGuide" aria-expanded="true" aria-controls="collapseUserGuide">
-            <i class="fas fa-book"></i> <span>User Guide</span>
-        </a>
-        <div id="collapseUserGuide" class="collapse" aria-labelledby="headingUAM" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">User Guide:</h6>
-                <a class="collapse-item" href="{{asset('storage/siip_userguide.pdf')}}" target="_blank">Download User Guide</a>
-            </div>
-        </div>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseUAM" aria-expanded="true" aria-controls="collapseUAM">
@@ -127,7 +104,6 @@
             </div>
         </div>
     </li>
-    <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
     <!-- Sidebar Toggler (Sidebar) -->
     <div class="text-center d-none d-md-inline">
