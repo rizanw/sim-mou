@@ -92,6 +92,11 @@
             <i class="fa-solid fa-users"></i> <span>Users</span>
         </a>
     </li>
+    <li class="nav-item {{ request()->is('app/control/user-activity') ? 'active' : '' }}">
+        <a class="nav-link" href="control/user-activity">
+        <i class="fas fa-list"></i> <span>User Activity Monitor</span>
+        </a>
+    </li>
     <li class="nav-item">
         <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseUAM" aria-expanded="true" aria-controls="collapseUAM">
             <i class="fas fa-list"></i> <span>User Activity Monitor</span>

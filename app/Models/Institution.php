@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Haruncpi\LaravelUserActivity\Traits\Loggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Institution extends Model
 {
     use HasFactory;
+    use Loggable;
 
     /**
      * Get one level of child the Institution.
