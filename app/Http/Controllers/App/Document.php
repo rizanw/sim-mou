@@ -160,6 +160,9 @@ class Document extends Controller
         if ($request['unspecifiedEndDate']) {
             $endDate = $this->endDateUnspecified;
         }
+        if (!isset($endDate)) {
+            return redirect()->back()->with('error', "Failed: End Date can't be null");
+        }
 
         try {
             $name = preg_replace("/[^a-zA-Z0-9]+/", "", $request['number']) . "_" . time() . ".pdf";
@@ -274,16 +277,23 @@ class Document extends Controller
             'status' => 'required',
             'document-type' => 'required',
             'startdate' => 'required',
-            'enddate' => 'required',
             'number' => 'required',
             'title' => 'required',
         ]);
+
+        $endDate = $request['enddate'];
+        if ($request['unspecifiedEndDate']) {
+            $endDate = $this->endDateUnspecified;
+        }
+        if (!isset($endDate)) {
+            return redirect()->back()->with('error', "Failed: End Date can't be null");
+        }
 
         try {
             $data = ModelsDocument::find($request['id']);
             $data->status = $request['status'];
             $data->start_date = $request['startdate'];
-            $data->end_date = $request['enddate'];
+            $data->end_date = $endDate;
             $data->document_type_id = $request['document-type'];
             $data->number = $request['number'];
             $data->title = $request['title'];
