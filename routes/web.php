@@ -13,6 +13,8 @@ use App\Http\Controllers\App\Partner;
 use App\Http\Controllers\App\PartnerUnit;
 use App\Http\Controllers\App\Program;
 use App\Http\Controllers\App\User;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Chart\DocumentChart;
 use App\Http\Controllers\Chart\PartnerChart;
 use Illuminate\Support\Facades\Auth;
@@ -33,8 +35,16 @@ Route::get('/', function () {
     return view('welcome');
 })->name('landingpage');
 
-Auth::routes();
+// Auth
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+if (env('APP_ENV') == 'local') {
+    Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+    Route::post('/register', [RegisterController::class, 'register']);
+}
 
+// redirection
 Route::get('/redirection', function () {
     if (Auth::check()) {
         return redirect()->route('app');
@@ -56,7 +66,7 @@ Route::prefix('chart')->group(function () {
     });
 });
 
-
+// authenticated App
 Route::prefix('app')->middleware(['auth'])->group(function () {
     Route::get('/', function () {
         return redirect('/app/dashboard');

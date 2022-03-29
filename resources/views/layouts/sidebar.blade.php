@@ -97,18 +97,6 @@
         <i class="fas fa-list"></i> <span>User Activity Monitor</span>
         </a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseUAM" aria-expanded="true" aria-controls="collapseUAM">
-            <i class="fas fa-list"></i> <span>User Activity Monitor</span>
-        </a>
-        <div id="collapseUAM" class="collapse" aria-labelledby="headingUAM" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Logs:</h6>
-                <!-- <a class="collapse-item" href="{{route('dashboard')}}">Logged Activities</a>
-                <a class="collapse-item" href="{{route('dashboard')}}">Logged Log-in</a> -->
-            </div>
-        </div>
-    </li>
     <hr class="sidebar-divider d-none d-md-block">
     <!-- Sidebar Toggler (Sidebar) -->
     <div class="text-center d-none d-md-inline">
