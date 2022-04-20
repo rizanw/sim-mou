@@ -40,7 +40,21 @@ class Document extends Controller
      */
     public function index()
     {
-        return view('app.document.index');
+        $institutions = Institution::whereHas('documents', function ($query) {
+            $query->where('party', '!=', 1);
+        })->get();
+        $countries = array();
+        $continents = array();
+        foreach ($institutions as $institution) {
+            if (isset($institution->country->name)) {
+                array_push($countries, $institution->country->name);
+                array_push($continents, $institution->country->continent->name);
+            }
+        }
+
+        return view('app.document.index')
+            ->with("countries", array_unique($countries, SORT_STRING))
+            ->with("continents", array_unique($continents, SORT_STRING));
     }
 
     /**
@@ -54,10 +68,14 @@ class Document extends Controller
         $data = array();
         foreach ($documents as $document) {
             $partners = array();
+            $countries = array();
+            $continents = array();
             if (isset($document->institutions)) {
                 foreach ($document->institutions as $key => $value) {
-                    if ($value->is_partner && !isset($value->parent_id)) {
+                    if (!isset($value->parent_id) && $value->pivot->party != 1) {
                         array_push($partners, $value->name);
+                        array_push($countries, $value->country->name);
+                        array_push($continents, $value->country->continent->name);
                     }
                 }
             }
@@ -68,6 +86,8 @@ class Document extends Controller
                 'number' => $document->number,
                 'status' => $document->status,
                 'type' => $document->documentType,
+                'country' => implode(" ", $countries),
+                'continent' => implode(" ", $continents),
                 'partners' => $partners,
                 'desc' => $document->desc,
                 'startDate' => $document->start_date,

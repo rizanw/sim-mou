@@ -93,7 +93,7 @@
         </a>
     </li>
     <li class="nav-item {{ request()->is('app/control/user-activity') ? 'active' : '' }}">
-        <a class="nav-link" href="control/user-activity">
+        <a class="nav-link" href="/app/control/user-activity">
         <i class="fas fa-list"></i> <span>User Activity Monitor</span>
         </a>
     </li>

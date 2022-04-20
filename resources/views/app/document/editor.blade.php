@@ -158,6 +158,7 @@
                         @endif
                         @endforeach
                     </select>
+                    <div id="party1help" class="form-text">hint: select our institution here!</div>
                 </div>
             </div>
             <div class="form-group row mb-4">
